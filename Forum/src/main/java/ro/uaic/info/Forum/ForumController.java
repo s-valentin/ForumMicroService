@@ -1,55 +1,42 @@
 package ro.uaic.info.Forum;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "forum")
 public class ForumController {
 
-    @GetMapping("/forum")
+    private final ForumService forumService;
+
+    @Autowired
+    public ForumController(ForumService forumService) {
+        this.forumService = forumService;
+    }
+
+    @GetMapping()
     public ForumList forum(){
-
-        ForumList dummy = new ForumList("Libero");
-
-        dummy.createForum("Diana", "mad");
-        dummy.createForum("Diana", "extra mad");
-
-        return dummy;
-
+        return forumService.forum();
     }
 
     @GetMapping("/list")
     public List<Forum> list(){
-
-        ForumList dummy = new ForumList("Libero");
-
-        dummy.createForum("Diana", "mad");
-        dummy.createForum("Diana", "extra mad");
-
-        return dummy.getForums();
-
+        return forumService.list();
     }
 
     @GetMapping("/question")
     public Question question(){
-
-        Question dummy = new Question("What is this", "I dont knoooow");
-
-        return dummy;
-
+        return forumService.question();
     }
 
     @GetMapping("/comment")
     public List<Comment> comment(){
-
-        Question dummy = new Question("Idk", "I don't");
-        dummy.addComment("I like this");
-
-        return dummy.getComments();
-
+        return forumService.comment();
     }
 
 }
