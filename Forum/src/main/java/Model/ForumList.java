@@ -1,4 +1,4 @@
-package ro.uaic.info.Forum;
+package Model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,10 @@
-package ro.uaic.info.Forum;
+package Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question {
+public class Question extends Entity {
 
-    private String id;
     private String title;
     private String content;
     private int numberOfLikes;
@@ -16,11 +15,18 @@ public class Question {
     public Question(String title, String content) {
         this.title = title;
         this.content = content;
-        this.id = "1";
         this.numberOfLikes = 0;
         this.numberOfDislikes = 0;
         this.numberOfComments = 0;
         this.comments = new ArrayList<>();
+    }
+
+    public void setNumberOfLikes(int numberOfLikes) {
+        this.numberOfLikes = numberOfLikes;
+    }
+
+    public void setNumberOfDislikes(int numberOfDislikes) {
+        this.numberOfDislikes = numberOfDislikes;
     }
 
     public String getTitle() {

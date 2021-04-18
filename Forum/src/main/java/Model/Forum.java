@@ -1,11 +1,10 @@
-package ro.uaic.info.Forum;
+package Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Forum {
+public class Forum extends Entity{
 
-    private String id;
     private String name;
     private String topic;
     private int numberOfQuestions;
@@ -14,7 +13,6 @@ public class Forum {
     public Forum(String name, String topic) {
         this.name = name;
         this.topic = topic;
-        this.id = "1";
         this.numberOfQuestions = 0;
         this.questions = new ArrayList<>();
     }

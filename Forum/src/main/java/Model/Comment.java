@@ -1,17 +1,23 @@
-package ro.uaic.info.Forum;
+package Model;
 
-public class Comment {
+public class Comment extends Entity{
 
-    private String id;
     private String content;
     private int numberOfLikes;
     private int numberOfDislikes;
 
     public Comment(String content) {
-        this.id = "1";
         this.content = content;
         this.numberOfDislikes = 0;
         this.numberOfLikes = 0;
+    }
+
+    public void setNumberOfLikes(int numberOfLikes) {
+        this.numberOfLikes = numberOfLikes;
+    }
+
+    public void setNumberOfDislikes(int numberOfDislikes) {
+        this.numberOfDislikes = numberOfDislikes;
     }
 
     public String getContent() {

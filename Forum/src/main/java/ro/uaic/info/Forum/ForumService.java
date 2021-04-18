@@ -1,6 +1,10 @@
 package ro.uaic.info.Forum;
 
 
+import Model.Comment;
+import Model.Forum;
+import Model.ForumList;
+import Model.Question;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +50,12 @@ public class ForumService {
         return dummy.getComments();
 
     }
+
+   /* public Comment take(){
+
+
+
+    }*/
 
 
 }
