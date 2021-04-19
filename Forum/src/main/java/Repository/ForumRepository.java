@@ -34,7 +34,7 @@ public class ForumRepository implements Repository<Forum>{
         Forum forum = null;
         try(Connection connection = getConnection()){
 
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM Forums WHERE id = ?");
+            PreparedStatement st = connection.prepareStatement("select * from Forums where id = ?");
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             rs.next();
@@ -64,6 +64,7 @@ public class ForumRepository implements Repository<Forum>{
                     question.getComments().add(comment);
                 }
 
+                question.setNumberOfComments(question.getComments().size());
                 forum.getQuestions().add(question);
             }
 
@@ -71,6 +72,7 @@ public class ForumRepository implements Repository<Forum>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        forum.setNumberOfQuestions(forum.getQuestions().size());
         return forum;
     }
 
@@ -78,17 +80,20 @@ public class ForumRepository implements Repository<Forum>{
 
     @Override
     public List<Forum> findAll() {
+
         return null;
+
     }
 
     @Override
     public Forum save(Forum entity) {
+        //insert into Forum/Question/Comment values(entity.plm)
         return null;
     }
 
     @Override
     public void update(Forum entity) {
-
+        //update
     }
 
     @Override

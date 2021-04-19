@@ -49,6 +49,10 @@ public class Question extends Entity {
         return numberOfComments;
     }
 
+    public void setNumberOfComments(int numberOfComments) {
+        this.numberOfComments = numberOfComments;
+    }
+
     public List<Comment> getComments() {
         return comments;
     }

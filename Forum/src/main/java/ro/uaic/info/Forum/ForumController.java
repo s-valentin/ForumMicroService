@@ -24,23 +24,8 @@ public class ForumController {
     }
 
     @GetMapping()
-    public ForumList forum(){
+    public Forum forum(){
         return forumService.forum();
-    }
-
-    @GetMapping("/list")
-    public List<Forum> list(){
-        return forumService.list();
-    }
-
-    @GetMapping("/question")
-    public Question question(){
-        return forumService.question();
-    }
-
-    @GetMapping("/comment")
-    public List<Comment> comment(){
-        return forumService.comment();
     }
 
 }

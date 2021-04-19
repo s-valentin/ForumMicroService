@@ -39,4 +39,9 @@ public class ForumList {
 
     }
 
+    public void addForum(Forum forum) {
+        forums.add(forum);
+        numberOfForums++;
+    }
+
 }

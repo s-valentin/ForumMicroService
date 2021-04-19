@@ -17,6 +17,14 @@ public class Forum extends Entity{
         this.questions = new ArrayList<>();
     }
 
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
     public String getName() {
         return name;
     }

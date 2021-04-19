@@ -5,6 +5,7 @@ import Model.Comment;
 import Model.Forum;
 import Model.ForumList;
 import Model.Question;
+import Repository.ForumRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,50 +13,11 @@ import java.util.List;
 @Service
 public class ForumService {
 
-    public ForumList forum(){
+    public Forum forum(){
 
-        ForumList dummy = new ForumList("Libero");
-
-        dummy.createForum("Diana", "mad");
-        dummy.createForum("Diana", "extra mad");
-
-        return dummy;
+        ForumRepository forumRepository = new ForumRepository();
+        return forumRepository.findOne(1);
 
     }
-
-    public List<Forum> list(){
-
-        ForumList dummy = new ForumList("Libero");
-
-        dummy.createForum("Diana", "mad");
-        dummy.createForum("Diana", "extra mad");
-
-        return dummy.getForums();
-
-    }
-
-    public Question question(){
-
-        Question dummy = new Question("What is this", "I dont knoooow");
-
-        return dummy;
-
-    }
-
-    public List<Comment> comment(){
-
-        Question dummy = new Question("Idk", "I don't");
-        dummy.addComment("I like this");
-
-        return dummy.getComments();
-
-    }
-
-   /* public Comment take(){
-
-
-
-    }*/
-
 
 }
