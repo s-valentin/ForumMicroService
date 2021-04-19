@@ -13,10 +13,10 @@ public interface Repository<E extends Entity> {
 
     public E findAll(); // read
 
-    public E save(E entity); // create
+    public boolean save(E entity); // create
 
-    public void update(E entity); // update
+    public boolean update(E entity); // update
 
-    public void delete(int id); // delete
+    public boolean delete(int id); // delete
 
 }

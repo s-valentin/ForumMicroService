@@ -12,6 +12,15 @@ public class Question extends Entity {
     private int numberOfComments;
     private List<Comment> comments;
 
+    public Question() {
+        this.title = "";
+        this.content = "";
+        this.numberOfLikes = 0;
+        this.numberOfDislikes = 0;
+        this.numberOfComments = 0;
+        this.comments = new ArrayList<>();
+    }
+
     public Question(String title, String content) {
         this.title = title;
         this.content = content;

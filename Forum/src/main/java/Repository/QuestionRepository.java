@@ -15,17 +15,17 @@ public class QuestionRepository implements Repository<Question>{
     }
 
     @Override
-    public Question save(Question entity) {
-        return null;
+    public boolean save(Question entity) {
+        return false;
     }
 
     @Override
-    public void update(Question entity) {
-
+    public boolean update(Question entity) {
+        return false;
     }
 
     @Override
-    public void delete(int id) {
-
+    public boolean delete(int id) {
+        return false;
     }
 }

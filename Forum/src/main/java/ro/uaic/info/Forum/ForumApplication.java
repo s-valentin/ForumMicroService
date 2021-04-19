@@ -12,7 +12,7 @@ public class ForumApplication {
 	public static void main(String[] args) {
 
 		try{
-			System.getProperties().load(new FileReader("D:\\Git\\ForumMicroService\\Forum\\src\\main\\resources\\application.properties"));
+			System.getProperties().load(new FileReader("F:\\Facultate\\AN 2\\Sem2\\IP\\ForumMicroService\\Forum\\src\\main\\resources\\application.properties"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}

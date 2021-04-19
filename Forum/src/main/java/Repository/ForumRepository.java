@@ -83,18 +83,19 @@ public class ForumRepository implements Repository<Forum> {
     }
 
     @Override
-    public Forum save(Forum entity) {
+    public boolean save(Forum entity) {
         //insert into Forum/Question/Comment values(entity.plm)
-        return null;
+        return false;
     }
 
     @Override
-    public void update(Forum entity) {
+    public boolean update(Forum entity) {
         //update
+        return false;
     }
 
     @Override
-    public void delete(int id) {
-
+    public boolean delete(int id) {
+        return false;
     }
 }
