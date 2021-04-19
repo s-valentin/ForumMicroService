@@ -28,4 +28,9 @@ public class ForumController {
         return forumService.forum();
     }
 
+    @GetMapping("/list")
+    public ForumList list(){
+        return forumService.list();
+    }
+
 }

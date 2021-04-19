@@ -2,6 +2,7 @@ package Repository;
 
 import Model.Comment;
 import Model.Forum;
+import Model.ForumList;
 import Model.Question;
 
 import java.sql.*;
@@ -79,10 +80,49 @@ public class ForumRepository implements Repository<Forum>{
 
 
     @Override
-    public List<Forum> findAll() {
+    public ForumList findAll() {
 
-        return null;
+        ForumList forumList = null;
+        try(Connection connection = getConnection()){
 
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM Forums");
+            ResultSet rs = st.executeQuery();
+            while(rs.next()) {
+                Forum forum = new Forum(rs.getString("name"), rs.getString("topic"));
+                forum.setId(rs.getInt("id"));
+                PreparedStatement st2 = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?");
+                st2.setInt(1, forum.getId());
+                ResultSet rs2 = st2.executeQuery();
+                while (rs2.next()) {
+
+                    Question question = new Question(rs2.getString("title"), rs2.getString("content"));
+                    question.setId(rs2.getInt("id"));
+                    question.setNumberOfLikes(rs2.getInt("likes"));
+                    question.setNumberOfDislikes(rs2.getInt("dislikes"));
+
+                    PreparedStatement st3 = connection.prepareStatement("SELECT * FROM Comment WHERE id = ?");
+                    st3.setInt(1, question.getId());
+                    ResultSet rs3 = st3.executeQuery();
+                    while (rs3.next()) {
+
+                        Comment comment = new Comment(rs3.getString("content"));
+                        comment.setId(rs3.getInt("id"));
+                        comment.setNumberOfLikes(rs3.getInt("likes"));
+                        comment.setNumberOfDislikes(rs3.getInt("dislikes"));
+
+                        question.getComments().add(comment);
+                    }
+
+                    question.setNumberOfComments(question.getComments().size());
+                    forum.getQuestions().add(question);
+                }
+                forumList.addForum(forum);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return forumList;
     }
 
     @Override

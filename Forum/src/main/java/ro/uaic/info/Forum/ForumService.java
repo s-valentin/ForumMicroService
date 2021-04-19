@@ -20,4 +20,12 @@ public class ForumService {
 
     }
 
+    public ForumList list(){
+
+        ForumRepository forumRepository = new ForumRepository();
+        return forumRepository.findAll();
+
+    }
+
+
 }
