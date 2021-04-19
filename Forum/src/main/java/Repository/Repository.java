@@ -7,14 +7,16 @@ import java.util.List;
 
 public interface Repository<E extends Entity> {
 
-    public E findOne(int id);
+    //principiile CRUD.
 
-    public ForumList findAll();
+    public E findOne(int id); // read
 
-    public E save(E entity);
+    public E findAll(); // read
 
-    public void update(E entity);
+    public E save(E entity); // create
 
-    public void delete(int id);
+    public void update(E entity); // update
+
+    public void delete(int id); // delete
 
 }
