@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Question extends Entity {
+    private int idForum;
 
     private String title;
     private String content;
@@ -28,6 +29,10 @@ public class Question extends Entity {
         this.numberOfDislikes = 0;
         this.numberOfComments = 0;
         this.comments = new ArrayList<>();
+    }
+
+    public int getIdForum() {
+        return idForum;
     }
 
     public void setNumberOfLikes(int numberOfLikes) {
