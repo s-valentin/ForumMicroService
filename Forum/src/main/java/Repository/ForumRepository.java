@@ -52,7 +52,7 @@ public class ForumRepository implements Repository<Forum> {
                 question.setNumberOfLikes(rs2.getInt("likes"));
                 question.setNumberOfDislikes(rs2.getInt("dislikes"));
 
-                PreparedStatement st3 = connection.prepareStatement("SELECT * FROM Comment WHERE id = ?");
+                PreparedStatement st3 = connection.prepareStatement("SELECT * FROM Comment WHERE idQuestion = ?");
                 st3.setInt(1, question.getId());
                 ResultSet rs3 = st3.executeQuery();
                 while (rs3.next()) {
@@ -84,7 +84,7 @@ public class ForumRepository implements Repository<Forum> {
 
     @Override
     public boolean save(Forum entity) {
-        //insert into Forum/Question/Comment values(entity.plm)
+        //insert into Forum/Question/Comment values(entity.idk)
         return false;
     }
 
