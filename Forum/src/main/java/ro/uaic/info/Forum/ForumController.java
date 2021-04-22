@@ -22,13 +22,46 @@ public class ForumController {
     }
 
     @GetMapping()
-    public Forum forum() {
-        return forumService.forum();
+    public Forum forum(@RequestParam(value = "id") int id) {
+        return forumService.forum(id);
     }
 
-    @GetMapping("/list")
-    public ForumList list() {
-        return forumService.list();
+    @GetMapping("/allForums")
+    public List<Forum> forums() {
+        return forumService.forums();
+    }
+
+    @GetMapping("/addForum")
+    public void addForum(@RequestParam(value = "name") String name,
+                         @RequestParam(value = "topic") String topic){
+        forumService.addForum(name, topic);
+    }
+
+    @GetMapping("/deleteForum")
+    public void deleteForum(@RequestParam(value = "id") int id){
+        forumService.deleteForum(id);
+    }
+
+    @GetMapping("/question")
+    public Question question(@RequestParam(value = "id") int id){
+        return forumService.question(id);
+    }
+
+    @GetMapping("/allQuestions")
+    public List<Question> questions(){
+        return forumService.questions();
+    }
+
+    @GetMapping("/addQuestion")
+    public void addQuestion(@RequestParam(value = "idForum") int idForum,
+                            @RequestParam(value = "title") String title,
+                            @RequestParam(value = "content") String content){
+        forumService.addQuestion(idForum, title, content);
+    }
+
+    @GetMapping("/deleteQuestion")
+    public void deleteQuestion(@RequestParam(value="id") int id){
+        forumService.deleteQuestion(id);
     }
 
     /*

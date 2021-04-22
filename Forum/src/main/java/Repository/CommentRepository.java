@@ -3,6 +3,7 @@ package Repository;
 import Model.Comment;
 import Model.ForumList;
 import Model.Question;
+import net.bytebuddy.dynamic.scaffold.MethodRegistry;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,25 +11,7 @@ import java.util.List;
 
 public class CommentRepository implements Repository<Comment> {
 
-    // * Aceasta metoda creeaza conectiunea cu baza de date (SQLite)
-    // ? Probabil poate fi mutata in interfata ca metoda statica
-    private Connection getConnection() {
 
-        String url = System.getProperty("spring.datasource.url");
-        String username = System.getProperty("spring.datasource.username");
-        String password = System.getProperty("spring.datasource.password");
-
-        Connection connection = null;
-
-        try {
-
-            connection = DriverManager.getConnection(url, username, password);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return connection;
-    }
 
     // * Aceasta metoda returneaza un singur comentariu specificat de id
     @Override
@@ -36,7 +19,7 @@ public class CommentRepository implements Repository<Comment> {
         // * creez un comentariu pe care il returnez
         Comment comment = null;
 
-        try (Connection connection = getConnection()) {
+        try (Connection connection = Repository.getConnection()) {
             // * interoghez tabela comment pentru acel id
             PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE id = ?");
             st.setInt(1, id);
@@ -55,7 +38,7 @@ public class CommentRepository implements Repository<Comment> {
     }
 
     @Override
-    public Comment findAll() {
+    public List<Comment> findAll() {
         return null;
     }
 
@@ -65,7 +48,7 @@ public class CommentRepository implements Repository<Comment> {
         // * Creez o lista de comentarii pe care o voi returna
         List<Comment> commentList = new ArrayList<>();
 
-        try (Connection connection = getConnection()) {
+        try (Connection connection = Repository.getConnection()) {
             // * Interoghez tabela comments
             PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE idQuestion = ?");
             st.setInt(1, idQuestion);
@@ -89,7 +72,7 @@ public class CommentRepository implements Repository<Comment> {
     // * aceasta metoda insereaza in tabel un comment
     @Override
     public boolean save(Comment entity) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = Repository.getConnection()) {
             PreparedStatement st = connection.prepareStatement("INSERT INTO comment VALUES (NULL, ?, ?, ?, ?)");
             st.setInt(1, entity.getIdQuestion());
             st.setInt(2, entity.getNumberOfDislikes());
@@ -108,7 +91,7 @@ public class CommentRepository implements Repository<Comment> {
     // ! de modificat
     @Override
     public boolean update(Comment entity) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = Repository.getConnection()) {
             PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes=?, dislikes=?, content=?");
             st.setInt(1, entity.getNumberOfDislikes());
             st.setInt(2, entity.getNumberOfDislikes());
@@ -127,7 +110,7 @@ public class CommentRepository implements Repository<Comment> {
     // ! de implementat request-ul
     @Override
     public boolean delete(int id) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = Repository.getConnection()) {
             PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE id=?");
             st.setInt(1, id);
             st.executeUpdate();
@@ -138,4 +121,15 @@ public class CommentRepository implements Repository<Comment> {
     }
         return false;
     }
+
+    // * Aceasta metoda sterge toate comentariile unei intrebari
+    public boolean deleteAllByQuestion(int idQuestion, Connection connection) throws SQLException{
+
+            PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE idQuestion=?");
+            st.setInt(1, idQuestion);
+            st.executeUpdate();
+
+        return true;
+    }
+
 }

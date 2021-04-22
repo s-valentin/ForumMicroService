@@ -37,10 +37,7 @@ public class Forum extends Entity{
         return questions;
     }
 
-    public void addQuestion(String title, String content){
-        Question question = new Question(title, content);
-        questions.add(question);
-        numberOfQuestions++;
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
-
 }

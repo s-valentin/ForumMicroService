@@ -7,6 +7,7 @@ import Model.ForumList;
 import Model.Question;
 import Repository.CommentRepository;
 import Repository.ForumRepository;
+import Repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,23 +15,53 @@ import java.util.List;
 @Service
 public class ForumService {
 
-    public Forum forum() {
-        ForumRepository forumRepository = new ForumRepository();
-        return forumRepository.findOne(1);
+    private final ForumRepository forumRepository = new ForumRepository();
+    private final QuestionRepository questionRepository = new QuestionRepository();
+    private final CommentRepository commentRepository = new CommentRepository();
+
+
+    public Forum forum(int id) {
+        return forumRepository.findOne(id);
     }
 
-    public ForumList list() {
-        ForumRepository forumRepository = new ForumRepository();
-        return null;
+    public List<Forum> forums() {
+        return forumRepository.findAll();
+    }
+
+    public void addForum(String name, String topic) {
+        Forum forum = new Forum(name, topic);
+
+        forumRepository.save(forum);
+    }
+
+    public void deleteForum(int id) {
+        forumRepository.delete(id);
+    }
+
+    public Question question(int id) {
+        return questionRepository.findOne(id);
+    }
+
+    public List<Question> questions() {
+        return questionRepository.findAllByForum(3);
+    }
+
+    public void addQuestion(int idForum, String title, String content){
+        Question question = new Question(title, content);
+        question.setIdForum(idForum);
+
+        questionRepository.save(question);
+    }
+
+    public void deleteQuestion(int id) {
+        questionRepository.delete(id);
     }
 
     public Comment comment(int id) {
-        CommentRepository commentRepository = new CommentRepository();
         return commentRepository.findOne(id);
     }
 
     public List<Comment> allComments(int idQuestion) {
-        CommentRepository commentRepository = new CommentRepository();
         return commentRepository.findAllByQuestion(idQuestion);
     }
 
@@ -40,9 +71,6 @@ public class ForumService {
         comment.setNumberOfLikes(numberOfLikes);
         comment.setNumberOfDislikes(numberOfDislikes);
 
-        CommentRepository commentRepository = new CommentRepository();
         commentRepository.save(comment);
     }
-
-
 }

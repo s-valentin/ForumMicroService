@@ -7,9 +7,13 @@ public class Question extends Entity {
 
     private String title;
     private String content;
+
     private int numberOfLikes;
     private int numberOfDislikes;
     private int numberOfComments;
+
+    private int idForum;
+
     private List<Comment> comments;
 
     public Question() {
@@ -62,8 +66,20 @@ public class Question extends Entity {
         this.numberOfComments = numberOfComments;
     }
 
+    public int getIdForum() {
+        return idForum;
+    }
+
+    public void setIdForum(int idForum) {
+        this.idForum = idForum;
+    }
+
     public List<Comment> getComments() {
         return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public void addComment(String content){
