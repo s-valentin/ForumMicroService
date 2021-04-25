@@ -3,7 +3,6 @@ package ro.uaic.info.Forum;
 
 import Model.Comment;
 import Model.Forum;
-import Model.ForumList;
 import Model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
