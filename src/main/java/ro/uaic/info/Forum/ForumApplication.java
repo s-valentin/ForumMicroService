@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
 public class ForumApplication {
 
 	public static void main(String[] args) {
