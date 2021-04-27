@@ -46,7 +46,7 @@ public class ForumService {
         return questionRepository.findAllByForum(3);
     }
 
-    public void addQuestion(int idForum, String title, String content){
+    public void addQuestion(int idForum, String title, String content) {
         Question question = new Question(title, content);
         question.setIdForum(idForum);
 
@@ -72,5 +72,16 @@ public class ForumService {
         comment.setNumberOfDislikes(numberOfDislikes);
 
         commentRepository.save(comment);
+    }
+
+    public void upvoteComment(int idComment) {
+        commentRepository.upvoteComment(idComment);
+    }
+
+    public void downvoteComment(int idComment) {
+        commentRepository.upvoteComment(idComment);
+    }
+    public void updateComment(int idComment, String content){
+        commentRepository.updateContent(idComment,content);
     }
 }

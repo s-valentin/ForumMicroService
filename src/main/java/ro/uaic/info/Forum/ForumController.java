@@ -95,12 +95,20 @@ public class ForumController {
         forumService.addComment(idQuestion, content, numberOfLikes, numberOfDislikes);
     }
 
-    // * daca ceva nu trebuie modificat atunci se transmite ca parametru valoarea pe care o are la momentul update ului
-    // ! de gandit cum se face update
-//    @GetMapping("/updateComment")
-//    public void updateComment(@RequestParam(value = "content") String content,
-//                              @RequestParam(value = "nbLikes") int numberOfLikes,
-//                              @RequestParam(value = "nbDislikes") int numberOfDislikes) {
-//        forumService.updateContent(content, numberOfLikes, numberOfDislikes);
-//    }
+    @GetMapping("/upvoteComment")
+    public void upvoteComment(@RequestParam(value = "idComment") int idComment){
+        forumService.upvoteComment(idComment);
+    }
+
+    @GetMapping("/downvoteComment")
+    public void downvoteComment(@RequestParam(value = "idComment") int idComment){
+        forumService.downvoteComment(idComment);
+    }
+
+    @GetMapping("/updateCommentContent")
+    public void updateComment(@RequestParam(value = "idComment") int idComment,
+                              @RequestParam(value = "content") String content){
+        forumService.updateComment(idComment, content);
+    }
+
 }

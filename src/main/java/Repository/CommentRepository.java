@@ -105,6 +105,47 @@ public class CommentRepository implements Repository<Comment> {
         return false;
     }
 
+    public void updateContent(int id, String newContent){
+        try(Connection connection = Repository.getConnection())
+        {
+            PreparedStatement st = connection.prepareStatement("UPDATE comment (content) SET content = ? WHERE id = ?");
+            st.setString(1, newContent);
+            st.setInt(2, id);
+            st.executeUpdate();
+            System.out.println("A comment's content has been updated");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void upvoteComment(int id){
+        try(Connection connection = Repository.getConnection())
+        {
+            PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes = likes + 1 WHERE id = ?");
+            st.setInt(1, id);
+            st.executeUpdate();
+            System.out.println("A comment has been upvoted");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void downvoteComment(int id){
+        try(Connection connection = Repository.getConnection())
+        {
+            PreparedStatement st = connection.prepareStatement("UPDATE comment SET dislikes = dislikes + 1 WHERE id = ?");
+            st.setInt(1, id);
+            st.executeUpdate();
+            System.out.println("A comment has been downvoted");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     // * aceasta metoda sterge un comentariu din tabela
     // ! de implementat request-ul
