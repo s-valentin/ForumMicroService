@@ -79,7 +79,7 @@ public class ForumService {
     }
 
     public void downvoteComment(int idComment) {
-        commentRepository.upvoteComment(idComment);
+        commentRepository.downvoteComment(idComment);
     }
     public void updateComment(int idComment, String content){
         commentRepository.updateContent(idComment,content);
