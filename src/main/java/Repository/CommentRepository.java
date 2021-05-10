@@ -153,7 +153,7 @@ public class CommentRepository implements CommentDAO {
 
     // * Aceasta metoda sterge toate comentariile unei intrebari
     @Override
-    public boolean deleteAllByQuestion(int idQuestion){
+    public boolean deleteAllByQuestion(int idQuestion) {
 
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE idQuestion=?")) {
             st.setInt(1, idQuestion);

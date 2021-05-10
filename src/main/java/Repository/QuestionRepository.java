@@ -97,7 +97,7 @@ public class QuestionRepository implements QuestionDAO {
     // * Aceasta metoda adauga o intrebare in baza de date
     @Override
     public boolean save(Question entity) {
-        try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM Forums WHERE id = ? ");) {
+        try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM Forums WHERE id = ? ")) {
             // * Verific daca forumul in care adaug intrebarea exista.
             checkForum.setInt(1, entity.getIdForum());
             ResultSet rs = checkForum.executeQuery();

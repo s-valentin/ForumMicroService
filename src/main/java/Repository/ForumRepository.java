@@ -13,9 +13,9 @@ import java.util.List;
 
 public class ForumRepository implements ForumDAO {
 
-    private Connection connection;
+    private final Connection connection;
 
-    public ForumRepository(){
+    public ForumRepository() {
         connection = ConnectionSingleton.getConnection();
     }
 
@@ -117,7 +117,7 @@ public class ForumRepository implements ForumDAO {
     // * Aceasta metoda sterge un forum cu toate intrebarile lui
     @Override
     public boolean delete(int id) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM Forums WHERE id = ?");) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM Forums WHERE id = ?")) {
             statement.setInt(1, id);
             statement.executeUpdate();
 
