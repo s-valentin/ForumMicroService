@@ -151,7 +151,7 @@ public class QuestionRepository implements Repository<Question> {
 
         ResultSet rs = checkQuestion.executeQuery();
         boolean val = rs.next();
-        if(!val)
+        if (!val)
             return false;
 
         PreparedStatement statement = connection.prepareStatement("DELETE FROM Questions WHERE id=?");
@@ -175,11 +175,14 @@ public class QuestionRepository implements Repository<Question> {
         ResultSet rs = databaseQuestion.executeQuery();
 
         // * Pentru fiecare intrebare gasita cu idForum-ul specificat, o sterg apeland functia de mai sus.
-        while(rs.next()){
+        while (rs.next()) {
             deleteQuestion(rs.getInt("id"), connection);
         }
 
         return true;
 
     }
+
+
+
 }
