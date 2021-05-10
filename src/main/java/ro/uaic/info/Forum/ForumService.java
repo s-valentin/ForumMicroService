@@ -3,13 +3,13 @@ package ro.uaic.info.Forum;
 
 import Model.Comment;
 import Model.Forum;
-import Model.ForumList;
 import Model.Question;
 import Repository.CommentRepository;
 import Repository.ForumRepository;
 import Repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -18,6 +18,9 @@ public class ForumService {
     private final ForumRepository forumRepository = new ForumRepository();
     private final QuestionRepository questionRepository = new QuestionRepository();
     private final CommentRepository commentRepository = new CommentRepository();
+
+    public ForumService() throws SQLException {
+    }
 
 
     public Forum forum(int id) {
@@ -81,7 +84,8 @@ public class ForumService {
     public void downvoteComment(int idComment) {
         commentRepository.downvoteComment(idComment);
     }
-    public void updateComment(int idComment, String content){
-        commentRepository.updateContent(idComment,content);
+
+    public void updateComment(int idComment, String content) {
+        commentRepository.updateContent(idComment, content);
     }
 }

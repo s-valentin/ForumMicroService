@@ -1,10 +1,9 @@
 package Repository;
 
-import Model.Comment;
-import Model.ForumList;
+import ConnectionToDB.ConnectionSingleton;
+import DAOInterfaces.QuestionDAO;
 import Model.Question;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionRepository implements Repository<Question> {
+public class QuestionRepository implements QuestionDAO {
+
+    private final Connection connection;
+
+    public QuestionRepository() {
+        connection = ConnectionSingleton.getConnection();
+    }
 
     // * Aceasta metoda returneaza o singura intrebare, cu toate comentariile ei.
     @Override
@@ -21,9 +26,8 @@ public class QuestionRepository implements Repository<Question> {
         // * Creez o intrebare pe care o returnez la final
         Question question = null;
 
-        try (Connection connection = Repository.getConnection()) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM Questions WHERE id = ?")) {
             // * Pregatesc interogarea pentru baza de date
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM Questions WHERE id = ?");
             st.setInt(1, id);
 
             // * Execut interogarea
@@ -51,21 +55,14 @@ public class QuestionRepository implements Repository<Question> {
         return question;
     }
 
-    @Override
-    public List<Question> findAll() {
-        return null;
-    }
-
     // * Aceasta metoda returneaza toate intrebarile unui forum
     public List<Question> findAllByForum(int idForum) {
 
         // * Creez lista pe care o returnez la final
         List<Question> questions = new ArrayList<>();
 
-        try (Connection connection = Repository.getConnection()) {
-
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?")) {
             // * Pregatesc interogarea pentru baza de date
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?");
             st.setInt(1, idForum);
 
             // * Execut interogarea
@@ -100,9 +97,8 @@ public class QuestionRepository implements Repository<Question> {
     // * Aceasta metoda adauga o intrebare in baza de date
     @Override
     public boolean save(Question entity) {
-        try (Connection connection = Repository.getConnection()) {
+        try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM Forums WHERE id = ? ");) {
             // * Verific daca forumul in care adaug intrebarea exista.
-            PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM Forums WHERE id = ? ");
             checkForum.setInt(1, entity.getIdForum());
             ResultSet rs = checkForum.executeQuery();
             boolean val = rs.next();
@@ -136,8 +132,8 @@ public class QuestionRepository implements Repository<Question> {
     // * Face conexiunea cu baza de date
     @Override
     public boolean delete(int id) {
-        try (Connection connection = Repository.getConnection()) {
-            return deleteQuestion(id, connection);
+        try (Connection connection = ConnectionSingleton.getConnection()) {
+            return deleteQuestion(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -145,7 +141,7 @@ public class QuestionRepository implements Repository<Question> {
     }
 
     // * Aici se intampla stergerea propriu zisa
-    private boolean deleteQuestion(int id, Connection connection) throws SQLException {
+    public boolean deleteQuestion(int id) throws SQLException {
         PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM Questions WHERE id=?");
         checkQuestion.setInt(1, id);
 
@@ -160,13 +156,13 @@ public class QuestionRepository implements Repository<Question> {
 
         // * Ma folosesc de functia din commentRepository pentru a sterge toate comentariile
         CommentRepository commentRepository = new CommentRepository();
-        commentRepository.deleteAllByQuestion(id, connection);
+        commentRepository.deleteAllByQuestion(id);
 
         return true;
     }
 
     // * Aceasta metoda sterge toate intrebarile unui forum
-    public boolean deleteAllByForum(int idForum, Connection connection) throws SQLException {
+    public boolean deleteAllByForum(int idForum) throws SQLException {
 
         // * Interoghez baza de date pentru toate intrebarile unui forum
         PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?");
@@ -176,13 +172,10 @@ public class QuestionRepository implements Repository<Question> {
 
         // * Pentru fiecare intrebare gasita cu idForum-ul specificat, o sterg apeland functia de mai sus.
         while (rs.next()) {
-            deleteQuestion(rs.getInt("id"), connection);
+            deleteQuestion(rs.getInt("id"));
         }
 
         return true;
 
     }
-
-
-
 }

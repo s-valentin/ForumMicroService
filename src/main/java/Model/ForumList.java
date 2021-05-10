@@ -7,7 +7,7 @@ public class ForumList {
 
     private String name;
     private int numberOfForums;
-    private List<Forum> forums;
+    private final List<Forum> forums;
 
     public ForumList(String name) {
         this.name = name;

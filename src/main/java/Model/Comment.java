@@ -1,7 +1,8 @@
 package Model;
 
-public class Comment extends Entity{
+public class Comment {
 
+    private int id;
     private int idQuestion;
 
     private String content;
@@ -19,6 +20,14 @@ public class Comment extends Entity{
         this.content = content;
         this.numberOfDislikes = 0;
         this.numberOfLikes = 0;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIdQuestion() {

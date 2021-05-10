@@ -5,7 +5,10 @@ import Model.Comment;
 import Model.Forum;
 import Model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -32,34 +35,34 @@ public class ForumController {
 
     @GetMapping("/addForum")
     public void addForum(@RequestParam(value = "name") String name,
-                         @RequestParam(value = "topic") String topic){
+                         @RequestParam(value = "topic") String topic) {
         forumService.addForum(name, topic);
     }
 
     @GetMapping("/deleteForum")
-    public void deleteForum(@RequestParam(value = "id") int id){
+    public void deleteForum(@RequestParam(value = "id") int id) {
         forumService.deleteForum(id);
     }
 
     @GetMapping("/question")
-    public Question question(@RequestParam(value = "id") int id){
+    public Question question(@RequestParam(value = "id") int id) {
         return forumService.question(id);
     }
 
     @GetMapping("/allQuestions")
-    public List<Question> questions(){
+    public List<Question> questions() {
         return forumService.questions();
     }
 
     @GetMapping("/addQuestion")
     public void addQuestion(@RequestParam(value = "idForum") int idForum,
                             @RequestParam(value = "title") String title,
-                            @RequestParam(value = "content") String content){
+                            @RequestParam(value = "content") String content) {
         forumService.addQuestion(idForum, title, content);
     }
 
     @GetMapping("/deleteQuestion")
-    public void deleteQuestion(@RequestParam(value="id") int id){
+    public void deleteQuestion(@RequestParam(value = "id") int id) {
         forumService.deleteQuestion(id);
     }
 
@@ -96,18 +99,18 @@ public class ForumController {
     }
 
     @GetMapping("/upvoteComment")
-    public void upvoteComment(@RequestParam(value = "idComment") int idComment){
+    public void upvoteComment(@RequestParam(value = "idComment") int idComment) {
         forumService.upvoteComment(idComment);
     }
 
     @GetMapping("/downvoteComment")
-    public void downvoteComment(@RequestParam(value = "idComment") int idComment){
+    public void downvoteComment(@RequestParam(value = "idComment") int idComment) {
         forumService.downvoteComment(idComment);
     }
 
     @GetMapping("/updateCommentContent")
     public void updateComment(@RequestParam(value = "idComment") int idComment,
-                              @RequestParam(value = "content") String content){
+                              @RequestParam(value = "content") String content) {
         forumService.updateComment(idComment, content);
     }
 

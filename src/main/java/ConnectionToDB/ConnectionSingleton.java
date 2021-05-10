@@ -1,27 +1,13 @@
-package Repository;
-
-import Model.Entity;
-import Model.ForumList;
+package ConnectionToDB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 
-public interface Repository<E extends Entity> {
+public class ConnectionSingleton {
 
-    //principiile CRUD.
-
-    public E findOne(int id); // read
-
-    public List<E> findAll(); // read
-
-    public boolean save(E entity); // create
-
-    public boolean update(E entity); // update
-
-    public boolean delete(int id); // delete
-
+    private ConnectionSingleton() {
+    }
 
     // * Face conexiunea cu baza de date si o returneaza.
     public static Connection getConnection() {
@@ -40,7 +26,6 @@ public interface Repository<E extends Entity> {
             e.printStackTrace();
         }
         return connection;
-
     }
 
 }

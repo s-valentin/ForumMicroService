@@ -12,15 +12,15 @@ import java.io.IOException;
 @EnableEurekaClient
 public class ForumApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		try{
-			System.getProperties().load(new FileReader("src/main/resources/application.properties"));
-		} catch(IOException e){
-			e.printStackTrace();
-		}
-		SpringApplication.run(ForumApplication.class, args);
+        try {
+            System.getProperties().load(new FileReader("src/main/resources/application.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SpringApplication.run(ForumApplication.class, args);
 
-	}
+    }
 
 }

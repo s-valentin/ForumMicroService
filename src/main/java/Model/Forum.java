@@ -3,10 +3,11 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Forum extends Entity{
+public class Forum {
 
-    private String name;
-    private String topic;
+    private int id;
+    private final String name;
+    private final String topic;
     private int numberOfQuestions;
     private List<Question> questions;
 
@@ -15,6 +16,14 @@ public class Forum extends Entity{
         this.topic = topic;
         this.numberOfQuestions = 0;
         this.questions = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getNumberOfQuestions() {

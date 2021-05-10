@@ -1,17 +1,23 @@
 package Repository;
 
+import ConnectionToDB.ConnectionSingleton;
+import DAOInterfaces.CommentDAO;
 import Model.Comment;
-import Model.ForumList;
-import Model.Question;
-import net.bytebuddy.dynamic.scaffold.MethodRegistry;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentRepository implements Repository<Comment> {
+public class CommentRepository implements CommentDAO {
 
+    public Connection connection;
 
+    public CommentRepository() throws SQLException {
+        connection = ConnectionSingleton.getConnection();
+    }
 
     // * Aceasta metoda returneaza un singur comentariu specificat de id
     @Override
@@ -19,9 +25,8 @@ public class CommentRepository implements Repository<Comment> {
         // * creez un comentariu pe care il returnez
         Comment comment = null;
 
-        try (Connection connection = Repository.getConnection()) {
-            // * interoghez tabela comment pentru acel id
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE id = ?");
+        // * interoghez tabela comment pentru acel id
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE id = ?")) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             rs.next();
@@ -37,20 +42,15 @@ public class CommentRepository implements Repository<Comment> {
         return comment;
     }
 
-    @Override
-    public List<Comment> findAll() {
-        return null;
-    }
-
     // * Aceasta metoda returneaza toate comentariile de la o anumita intrebare
     // ! De verificat daca intrebarea cu acel id exista pentru a putea fi adaugat un comentariu
+    @Override
     public List<Comment> findAllByQuestion(int idQuestion) {
         // * Creez o lista de comentarii pe care o voi returna
         List<Comment> commentList = new ArrayList<>();
 
-        try (Connection connection = Repository.getConnection()) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE idQuestion = ?")) {
             // * Interoghez tabela comments
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE idQuestion = ?");
             st.setInt(1, idQuestion);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -72,8 +72,7 @@ public class CommentRepository implements Repository<Comment> {
     // * aceasta metoda insereaza in tabel un comment
     @Override
     public boolean save(Comment entity) {
-        try (Connection connection = Repository.getConnection()) {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO comment VALUES (NULL, ?, ?, ?, ?)");
+        try (PreparedStatement st = connection.prepareStatement("INSERT INTO comment VALUES (NULL, ?, ?, ?, ?)")) {
             st.setInt(1, entity.getIdQuestion());
             st.setInt(2, entity.getNumberOfDislikes());
             st.setInt(3, entity.getNumberOfDislikes());
@@ -91,8 +90,7 @@ public class CommentRepository implements Repository<Comment> {
     // ! de modificat
     @Override
     public boolean update(Comment entity) {
-        try (Connection connection = Repository.getConnection()) {
-            PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes=?, dislikes=?, content=?");
+        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes=?, dislikes=?, content=?")) {
             st.setInt(1, entity.getNumberOfDislikes());
             st.setInt(2, entity.getNumberOfDislikes());
             st.setString(3, entity.getContent());
@@ -105,70 +103,65 @@ public class CommentRepository implements Repository<Comment> {
         return false;
     }
 
-    public void updateContent(int id, String newContent){
-        try(Connection connection = Repository.getConnection())
-        {
-            PreparedStatement st = connection.prepareStatement("UPDATE comment (content) SET content = ? WHERE id = ?");
+    @Override
+    public void updateContent(int id, String newContent) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE comment (content) SET content = ? WHERE id = ?")) {
             st.setString(1, newContent);
             st.setInt(2, id);
             st.executeUpdate();
             System.out.println("A comment's content has been updated");
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void upvoteComment(int id){
-        try(Connection connection = Repository.getConnection())
-        {
-            PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes = likes + 1 WHERE id = ?");
+    @Override
+    public void upvoteComment(int id) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes = likes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A comment has been upvoted");
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void downvoteComment(int id){
-        try(Connection connection = Repository.getConnection())
-        {
-            PreparedStatement st = connection.prepareStatement("UPDATE comment SET dislikes = dislikes + 1 WHERE id = ?");
+    @Override
+    public void downvoteComment(int id) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET dislikes = dislikes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A comment has been downvoted");
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-
 
     // * aceasta metoda sterge un comentariu din tabela
     // ! de implementat request-ul
     @Override
     public boolean delete(int id) {
-        try (Connection connection = Repository.getConnection()) {
-            PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE id=?");
+        try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE id=?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A comment has been DELETED successfully from the table");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-     catch (SQLException e) {
-        e.printStackTrace();
-    }
         return false;
     }
 
     // * Aceasta metoda sterge toate comentariile unei intrebari
-    public boolean deleteAllByQuestion(int idQuestion, Connection connection) throws SQLException{
+    @Override
+    public boolean deleteAllByQuestion(int idQuestion){
 
-            PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE idQuestion=?");
+        try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE idQuestion=?")) {
             st.setInt(1, idQuestion);
             st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return true;
     }

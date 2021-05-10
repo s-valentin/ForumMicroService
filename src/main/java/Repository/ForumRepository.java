@@ -1,15 +1,23 @@
 package Repository;
 
-import Model.Comment;
+import ConnectionToDB.ConnectionSingleton;
+import DAOInterfaces.ForumDAO;
 import Model.Forum;
-import Model.ForumList;
-import Model.Question;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForumRepository implements Repository<Forum> {
+public class ForumRepository implements ForumDAO {
+
+    private Connection connection;
+
+    public ForumRepository(){
+        connection = ConnectionSingleton.getConnection();
+    }
 
     // * Aceasta metoda returneaza un forum, cu toate intrebarile lui.
     @Override
@@ -17,10 +25,10 @@ public class ForumRepository implements Repository<Forum> {
         // * Creez un forum pe care il returnez la final
         Forum forum = null;
 
-        try (Connection connection = Repository.getConnection()) {
+        try (PreparedStatement st = connection.prepareStatement("select * from Forums where id = ?")) {
 
             // * Pregatesc interogarea pentru baza de date
-            PreparedStatement st = connection.prepareStatement("select * from Forums where id = ?");
+
             st.setInt(1, id);
 
             // * Execut interogarea
@@ -51,15 +59,15 @@ public class ForumRepository implements Repository<Forum> {
 
         List<Forum> forums = new ArrayList<>();
 
-        try(Connection connection = Repository.getConnection()){
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM Forums")) {
             // * Pregatesc interogarea pentru baza de date
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM Forums");
+
 
             // * Execut interogarea
             ResultSet rs = st.executeQuery();
 
             // * Trec prin toate randurile selectate
-            while(rs.next()){
+            while (rs.next()) {
 
                 // * Creez un forum caruia ii dau valori din baza de date
                 Forum forum = new Forum(rs.getString("name"), rs.getString("topic"));
@@ -73,7 +81,7 @@ public class ForumRepository implements Repository<Forum> {
                 // * Adaug forumul creat in lista finala.
                 forums.add(forum);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return forums;
@@ -83,17 +91,17 @@ public class ForumRepository implements Repository<Forum> {
     @Override
     public boolean save(Forum entity) {
 
-        try(Connection connection = Repository.getConnection()){
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Forums Values(NULL, ?, ?)")) {
 
             // * Pregatesc statement-ul de inserare in baza de date
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO Forums Values(NULL, ?, ?)");
+
             statement.setString(1, entity.getName());
             statement.setString(2, entity.getTopic());
 
             // * Adaug forumul in baza de date
             statement.executeUpdate();
             return true;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -109,18 +117,15 @@ public class ForumRepository implements Repository<Forum> {
     // * Aceasta metoda sterge un forum cu toate intrebarile lui
     @Override
     public boolean delete(int id) {
-        try(Connection connection = Repository.getConnection()){
-
-
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM Forums WHERE id = ?");
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM Forums WHERE id = ?");) {
             statement.setInt(1, id);
             statement.executeUpdate();
 
             // * Aici ma folosesc de functia din QuestionRepository pentru a sterge toate intrebarile si comentariile lor
             QuestionRepository questionRepository = new QuestionRepository();
-            questionRepository.deleteAllByForum(id, connection);
+            questionRepository.deleteAllByForum(id);
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return true;

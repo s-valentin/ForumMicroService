@@ -3,15 +3,16 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question extends Entity {
+public class Question {
 
-    private String title;
-    private String content;
+    private final String title;
+    private final String content;
 
     private int numberOfLikes;
     private int numberOfDislikes;
     private int numberOfComments;
 
+    private int id;
     private int idForum;
 
     private List<Comment> comments;
@@ -34,12 +35,12 @@ public class Question extends Entity {
         this.comments = new ArrayList<>();
     }
 
-    public void setNumberOfLikes(int numberOfLikes) {
-        this.numberOfLikes = numberOfLikes;
+    public int getId() {
+        return id;
     }
 
-    public void setNumberOfDislikes(int numberOfDislikes) {
-        this.numberOfDislikes = numberOfDislikes;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -54,8 +55,16 @@ public class Question extends Entity {
         return numberOfLikes;
     }
 
+    public void setNumberOfLikes(int numberOfLikes) {
+        this.numberOfLikes = numberOfLikes;
+    }
+
     public int getNumberOfDislikes() {
         return numberOfDislikes;
+    }
+
+    public void setNumberOfDislikes(int numberOfDislikes) {
+        this.numberOfDislikes = numberOfDislikes;
     }
 
     public int getNumberOfComments() {
@@ -82,7 +91,7 @@ public class Question extends Entity {
         this.comments = comments;
     }
 
-    public void addComment(String content){
+    public void addComment(String content) {
         Comment comment = new Comment(content);
         comments.add(comment);
         numberOfComments++;
