@@ -9,9 +9,11 @@ public interface ForumDAO {
 
     List<Forum> findAll();
 
-    boolean save(Forum entity);
+    void save(Forum entity);
 
-    boolean update(Forum entity);
+    boolean updateTitle(int id, String title);
 
-    boolean delete(int id);
+    boolean updateTopic(int id, String topic);
+
+    void delete(int id);
 }

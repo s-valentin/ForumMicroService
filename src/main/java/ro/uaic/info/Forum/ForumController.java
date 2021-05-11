@@ -23,6 +23,9 @@ public class ForumController {
         this.forumService = forumService;
     }
 
+    //---------------------------------------------------------------------------------------------
+    // ? Mapping Forumuri
+
     @GetMapping()
     public Forum forum(@RequestParam(value = "id") int id) {
         return forumService.forum(id);
@@ -39,10 +42,25 @@ public class ForumController {
         forumService.addForum(name, topic);
     }
 
+    @GetMapping("/updateForumTitle")
+    public void forumTitle(@RequestParam(value = "idForum") int idForum,
+                              @RequestParam(value = "title") String title){
+        forumService.changeForumTitle(idForum, title);
+    }
+
+    @GetMapping("/updateForumTopic")
+    public void forumTopic(@RequestParam(value = "idForum") int idForum,
+                              @RequestParam(value = "topic") String topic){
+        forumService.changeForumTopic(idForum, topic);
+    }
+
     @GetMapping("/deleteForum")
     public void deleteForum(@RequestParam(value = "id") int id) {
         forumService.deleteForum(id);
     }
+
+    //---------------------------------------------------------------------------------------------
+    // ? Mapping Intrebari
 
     @GetMapping("/question")
     public Question question(@RequestParam(value = "id") int id) {
@@ -61,30 +79,43 @@ public class ForumController {
         forumService.addQuestion(idForum, title, content);
     }
 
+    @GetMapping("/updateQuestionTitle")
+    public void questionTitle(@RequestParam(value = "idQuestion") int idQuestion,
+                              @RequestParam(value = "title") String title){
+        forumService.changeQuestionTitle(idQuestion, title);
+    }
+
+    @GetMapping("/updateQuestionContent")
+    public void questionContent(@RequestParam(value = "idQuestion") int idQuestion,
+                                @RequestParam(value = "content") String content){
+        forumService.changeQuestionContent(idQuestion, content);
+    }
+
+    @GetMapping("/upvoteQuestion")
+    public void upvoteQuestion(@RequestParam(value = "idQuestion") int idQuestion){
+        forumService.upvoteQuestion(idQuestion);
+    }
+
+    @GetMapping("/downvoteQuestion")
+    public void downvoteQuestion(@RequestParam(value = "idQuestion") int idQuestion){
+        forumService.downvoteQuestion(idQuestion);
+    }
+
     @GetMapping("/deleteQuestion")
     public void deleteQuestion(@RequestParam(value = "id") int id) {
         forumService.deleteQuestion(id);
     }
 
-    /*
-     * returneaza un json o intrebare cu un id specific
-     * id
-     * content
-     * numberOfLikes
-     * numberOfDislikes
-     */
+
+
+    //---------------------------------------------------------------------------------------------
+    // ? Mapping Comentarii
+
     @GetMapping("/comment")
     public Comment comment(@RequestParam(value = "id") int id) {
         return forumService.comment(id);
     }
 
-    /*
-     * returneaza un json cu toate comentariile de la o intrebare
-     * id
-     * content
-     * numberOfLikes
-     * numberOfDislikes
-     */
     @GetMapping("/allComments")
     public List<Comment> comments(@RequestParam(value = "idQuestion") int idQuestion) {
         return forumService.allComments(idQuestion);
@@ -114,4 +145,15 @@ public class ForumController {
         forumService.updateComment(idComment, content);
     }
 
+    @GetMapping("/deleteComment")
+    public void deleteComment(@RequestParam(value = "idComment") int idComment){
+        forumService.deleteComment(idComment);
+    }
+
+    // * Sterge toate comentariile asociate unei intrebari
+    // ! nu toate comentariile existente in baza de date
+    @GetMapping("/deleteAllComments")
+    public void deleteAllComments(@RequestParam(value = "idQuestion") int idQuestion){
+        forumService.deleteAllComments(idQuestion);
+    }
 }

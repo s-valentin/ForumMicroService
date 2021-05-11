@@ -89,7 +89,7 @@ public class ForumRepository implements ForumDAO {
     }
 
     @Override
-    public boolean save(Forum entity) {
+    public void save(Forum entity) {
 
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Forums Values(NULL, ?, ?)")) {
 
@@ -100,23 +100,41 @@ public class ForumRepository implements ForumDAO {
 
             // * Adaug forumul in baza de date
             statement.executeUpdate();
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean updateTitle(int id, String title) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE forums (title) SET title = ? WHERE id = ?")) {
+            st.setString(1, title);
+            st.setInt(2, id);
+            st.executeUpdate();
+            System.out.println("A forums' title has been updated");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
-    public boolean update(Forum entity) {
-        //update
+    public boolean updateTopic(int id, String topic) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE forums (topic) SET topic = ? WHERE id = ?")) {
+            st.setString(1, topic);
+            st.setInt(2, id);
+            st.executeUpdate();
+            System.out.println("A forums' topic has been updated");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     // * Aceasta metoda sterge un forum cu toate intrebarile lui
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM Forums WHERE id = ?")) {
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -128,6 +146,5 @@ public class ForumRepository implements ForumDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
     }
 }

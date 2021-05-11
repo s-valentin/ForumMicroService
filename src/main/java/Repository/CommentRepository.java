@@ -71,7 +71,7 @@ public class CommentRepository implements CommentDAO {
 
     // * aceasta metoda insereaza in tabel un comment
     @Override
-    public boolean save(Comment entity) {
+    public void save(Comment entity) {
         try (PreparedStatement st = connection.prepareStatement("INSERT INTO comment VALUES (NULL, ?, ?, ?, ?)")) {
             st.setInt(1, entity.getIdQuestion());
             st.setInt(2, entity.getNumberOfDislikes());
@@ -79,28 +79,9 @@ public class CommentRepository implements CommentDAO {
             st.setString(4, entity.getContent());
             st.executeUpdate();
             System.out.println("A comment has been ADDED successfully in the table");
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
-    }
-
-    // * aceasta metoda face update in tabela comment
-    // ! de modificat
-    @Override
-    public boolean update(Comment entity) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes=?, dislikes=?, content=?")) {
-            st.setInt(1, entity.getNumberOfDislikes());
-            st.setInt(2, entity.getNumberOfDislikes());
-            st.setString(3, entity.getContent());
-            st.executeUpdate();
-            System.out.println("A comment has been UPDATED successfully in the table");
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override
@@ -138,9 +119,8 @@ public class CommentRepository implements CommentDAO {
     }
 
     // * aceasta metoda sterge un comentariu din tabela
-    // ! de implementat request-ul
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE id=?")) {
             st.setInt(1, id);
             st.executeUpdate();
@@ -148,12 +128,11 @@ public class CommentRepository implements CommentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     // * Aceasta metoda sterge toate comentariile unei intrebari
     @Override
-    public boolean deleteAllByQuestion(int idQuestion) {
+    public void deleteAllByQuestion(int idQuestion) {
 
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE idQuestion=?")) {
             st.setInt(1, idQuestion);
@@ -163,7 +142,6 @@ public class CommentRepository implements CommentDAO {
             e.printStackTrace();
         }
 
-        return true;
     }
 
 }

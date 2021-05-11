@@ -10,13 +10,19 @@ public interface QuestionDAO {
 
     List<Question> findAllByForum(int idForum);
 
-    boolean save(Question entity);
+    void save(Question entity);
 
-    boolean update(Question entity);
+    void updateQuestionTitle(int id, String title);
 
-    boolean delete(int id);
+    void updateQuestionContent(int id, String content);
 
-    boolean deleteQuestion(int id) throws SQLException;
+    void upvoteQuestion(int id);
 
-    boolean deleteAllByForum(int idForum) throws SQLException;
+    void downvoteQuestion(int id);
+
+    void delete(int id);
+
+    void deleteQuestion(int id) throws SQLException;
+
+    void deleteAllByForum(int idForum) throws SQLException;
 }

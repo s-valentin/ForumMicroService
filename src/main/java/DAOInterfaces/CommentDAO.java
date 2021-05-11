@@ -10,9 +10,7 @@ public interface CommentDAO {
 
     List<Comment> findAllByQuestion(int idQuestion);
 
-    boolean save(Comment entity);
-
-    boolean update(Comment entity);
+    void save(Comment entity);
 
     void updateContent(int id, String newContent);
 
@@ -20,7 +18,7 @@ public interface CommentDAO {
 
     void downvoteComment(int id);
 
-    boolean delete(int id);
+    void delete(int id);
 
-    boolean deleteAllByQuestion(int idQuestion) throws SQLException;
+    void deleteAllByQuestion(int idQuestion) throws SQLException;
 }

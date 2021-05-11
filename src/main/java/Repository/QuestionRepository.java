@@ -96,7 +96,7 @@ public class QuestionRepository implements QuestionDAO {
 
     // * Aceasta metoda adauga o intrebare in baza de date
     @Override
-    public boolean save(Question entity) {
+    public void save(Question entity) {
         try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM Forums WHERE id = ? ")) {
             // * Verific daca forumul in care adaug intrebarea exista.
             checkForum.setInt(1, entity.getIdForum());
@@ -104,7 +104,7 @@ public class QuestionRepository implements QuestionDAO {
             boolean val = rs.next();
             // * Returnez false daca interogarea de mai sus imi returneaza 0 randuri
             if (!val)
-                return false;
+                return;
 
             // * Pregatesc statement-ul de inserare in baza de date
             PreparedStatement statement = connection.prepareStatement("INSERT INTO Questions VALUES (NULL, ?, ?, ?, ?, ?)");
@@ -116,39 +116,77 @@ public class QuestionRepository implements QuestionDAO {
 
             // * Adaug intrebarea in baza de date si returnez true
             statement.executeUpdate();
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
-    public boolean update(Question entity) {
-        return false;
+    public void updateQuestionTitle(int id, String title) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE questions (title) SET title = ? WHERE id = ?")) {
+            st.setString(1, title);
+            st.setInt(2, id);
+            st.executeUpdate();
+            System.out.println("A question's title has been updated");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateQuestionContent(int id, String content) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE questions (content) SET content = ? WHERE id = ?")) {
+            st.setString(1, content);
+            st.setInt(2, id);
+            st.executeUpdate();
+            System.out.println("A question's content has been updated");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void upvoteQuestion(int id) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET likes = likes + 1 WHERE id = ?")) {
+            st.setInt(1, id);
+            st.executeUpdate();
+            System.out.println("A question has been upvoted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void downvoteQuestion(int id) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET dislikes = dislikes + 1 WHERE id = ?")) {
+            st.setInt(1, id);
+            st.executeUpdate();
+            System.out.println("A question has been downvoted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // * Aceasta metoda sterge o intrebare si toate comentariile ei
     // * Face conexiunea cu baza de date
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         try (Connection connection = ConnectionSingleton.getConnection()) {
-            return deleteQuestion(id);
+            deleteQuestion(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     // * Aici se intampla stergerea propriu zisa
-    public boolean deleteQuestion(int id) throws SQLException {
+    public void deleteQuestion(int id) throws SQLException {
         PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM Questions WHERE id=?");
         checkQuestion.setInt(1, id);
 
         ResultSet rs = checkQuestion.executeQuery();
         boolean val = rs.next();
         if (!val)
-            return false;
+            return;
 
         PreparedStatement statement = connection.prepareStatement("DELETE FROM Questions WHERE id=?");
         statement.setInt(1, id);
@@ -158,11 +196,10 @@ public class QuestionRepository implements QuestionDAO {
         CommentRepository commentRepository = new CommentRepository();
         commentRepository.deleteAllByQuestion(id);
 
-        return true;
     }
 
     // * Aceasta metoda sterge toate intrebarile unui forum
-    public boolean deleteAllByForum(int idForum) throws SQLException {
+    public void deleteAllByForum(int idForum) throws SQLException {
 
         // * Interoghez baza de date pentru toate intrebarile unui forum
         PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?");
@@ -174,8 +211,6 @@ public class QuestionRepository implements QuestionDAO {
         while (rs.next()) {
             deleteQuestion(rs.getInt("id"));
         }
-
-        return true;
 
     }
 }

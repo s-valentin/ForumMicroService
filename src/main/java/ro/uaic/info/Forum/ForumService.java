@@ -88,4 +88,36 @@ public class ForumService {
     public void updateComment(int idComment, String content) {
         commentRepository.updateContent(idComment, content);
     }
+
+    public void deleteComment(int idComment) {
+        commentRepository.delete(idComment);
+    }
+
+    public void deleteAllComments(int idQuestion) {
+        commentRepository.deleteAllByQuestion(idQuestion);
+    }
+
+    public void changeQuestionTitle(int idQuestion, String title) {
+        questionRepository.updateQuestionTitle(idQuestion, title);
+    }
+
+    public void changeQuestionContent(int idQuestion, String content) {
+        questionRepository.updateQuestionContent(idQuestion, content);
+    }
+
+    public void upvoteQuestion(int idQuestion) {
+        questionRepository.upvoteQuestion(idQuestion);
+    }
+
+    public void downvoteQuestion(int idQuestion) {
+        questionRepository.downvoteQuestion(idQuestion);
+    }
+
+    public void changeForumTitle(int idForum, String title) {
+        forumRepository.updateTitle(idForum, title);
+    }
+
+    public void changeForumTopic(int idForum, String topic) {
+        forumRepository.updateTopic(idForum, topic);
+    }
 }
