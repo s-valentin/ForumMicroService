@@ -36,7 +36,7 @@ public class ForumRepository implements ForumDAO {
             rs.next();
 
             // * Instantiez forumul cu valori din baza de date
-            forum = new Forum(rs.getString("name"), rs.getString("topic"));
+            forum = new Forum(rs.getString("title"), rs.getString("topic"));
             forum.setId(rs.getInt("id"));
 
             // * Ma folosesc de QuestionRepository pentru a scoate toate intrebarile acestui forum
@@ -70,7 +70,7 @@ public class ForumRepository implements ForumDAO {
             while (rs.next()) {
 
                 // * Creez un forum caruia ii dau valori din baza de date
-                Forum forum = new Forum(rs.getString("name"), rs.getString("topic"));
+                Forum forum = new Forum(rs.getString("title"), rs.getString("topic"));
                 forum.setId(rs.getInt("id"));
 
                 // * Adaug toate intrebarile acelui forum
