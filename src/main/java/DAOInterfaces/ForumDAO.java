@@ -11,9 +11,9 @@ public interface ForumDAO {
 
     void save(Forum entity);
 
-    boolean updateTitle(int id, String title);
+    void updateTitle(int id, String title);
 
-    boolean updateTopic(int id, String topic);
+    void updateTopic(int id, String topic);
 
     void delete(int id);
 }

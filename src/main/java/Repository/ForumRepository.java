@@ -107,7 +107,7 @@ public class ForumRepository implements ForumDAO {
     }
 
     @Override
-    public boolean updateTitle(int id, String title) {
+    public void updateTitle(int id, String title) {
         try (PreparedStatement st = connection.prepareStatement("UPDATE forums (title) SET title = ? WHERE id = ?")) {
             st.setString(1, title);
             st.setInt(2, id);
@@ -116,11 +116,10 @@ public class ForumRepository implements ForumDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
-    public boolean updateTopic(int id, String topic) {
+    public void updateTopic(int id, String topic) {
         try (PreparedStatement st = connection.prepareStatement("UPDATE forums (topic) SET topic = ? WHERE id = ?")) {
             st.setString(1, topic);
             st.setInt(2, id);
@@ -129,7 +128,6 @@ public class ForumRepository implements ForumDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     // * Aceasta metoda sterge un forum cu toate intrebarile lui
