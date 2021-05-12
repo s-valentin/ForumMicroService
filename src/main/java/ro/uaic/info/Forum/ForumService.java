@@ -45,8 +45,8 @@ public class ForumService {
         return questionRepository.findOne(id);
     }
 
-    public List<Question> questions() {
-        return questionRepository.findAllByForum(3);
+    public List<Question> questions(int id) {
+        return questionRepository.findAllByForum(id);
     }
 
     public void addQuestion(int idForum, String title, String content) {
