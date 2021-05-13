@@ -46,7 +46,7 @@ public class ForumController {
         forumService.changeForumTitle(idForum, name);
     }
 
-    @PostMapping("/updateForumTopic")
+    @PutMapping("/updateForumTopic")
     public void forumTopic(@RequestParam(value = "idForum") int idForum,
                            @RequestParam(value = "topic") String topic) {
         forumService.changeForumTopic(idForum, topic);

@@ -108,7 +108,7 @@ public class ForumRepository implements ForumDAO {
 
     @Override
     public void updateTitle(int id, String name) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE forums (title) SET title = ? WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE forums SET title = ? WHERE id = ?")) {
             st.setString(1, name);
             st.setInt(2, id);
             st.executeUpdate();
@@ -120,7 +120,7 @@ public class ForumRepository implements ForumDAO {
 
     @Override
     public void updateTopic(int id, String topic) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE forums (topic) SET topic = ? WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE forums SET topic = ? WHERE id = ?")) {
             st.setString(1, topic);
             st.setInt(2, id);
             st.executeUpdate();
