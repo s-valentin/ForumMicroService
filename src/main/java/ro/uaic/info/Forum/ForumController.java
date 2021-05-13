@@ -40,14 +40,13 @@ public class ForumController {
         forumService.addForum(name, topic);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value ="/updateForumName")
-    @ResponseBody
+    @PostMapping("/updateForumName")
     public void forumTitle(@RequestParam(value = "idForum") int idForum,
                            @RequestParam(value = "name") String name) {
         forumService.changeForumTitle(idForum, name);
     }
 
-    @PutMapping("/updateForumTopic")
+    @PostMapping("/updateForumTopic")
     public void forumTopic(@RequestParam(value = "idForum") int idForum,
                            @RequestParam(value = "topic") String topic) {
         forumService.changeForumTopic(idForum, topic);

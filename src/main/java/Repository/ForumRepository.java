@@ -107,9 +107,9 @@ public class ForumRepository implements ForumDAO {
     }
 
     @Override
-    public void updateTitle(int id, String title) {
+    public void updateTitle(int id, String name) {
         try (PreparedStatement st = connection.prepareStatement("UPDATE forums (title) SET title = ? WHERE id = ?")) {
-            st.setString(1, title);
+            st.setString(1, name);
             st.setInt(2, id);
             st.executeUpdate();
             System.out.println("A forums' title has been updated");
