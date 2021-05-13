@@ -123,7 +123,7 @@ public class QuestionRepository implements QuestionDAO {
 
     @Override
     public void updateQuestionTitle(int id, String title) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE questions (title) SET title = ? WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET title = ? WHERE id = ?")) {
             st.setString(1, title);
             st.setInt(2, id);
             st.executeUpdate();
@@ -135,7 +135,7 @@ public class QuestionRepository implements QuestionDAO {
 
     @Override
     public void updateQuestionContent(int id, String content) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE questions (content) SET content = ? WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET content = ? WHERE id = ?")) {
             st.setString(1, content);
             st.setInt(2, id);
             st.executeUpdate();

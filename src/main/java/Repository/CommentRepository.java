@@ -86,7 +86,7 @@ public class CommentRepository implements CommentDAO {
 
     @Override
     public void updateContent(int id, String newContent) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE comment (content) SET content = ? WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET content = ? WHERE id = ?")) {
             st.setString(1, newContent);
             st.setInt(2, id);
             st.executeUpdate();
