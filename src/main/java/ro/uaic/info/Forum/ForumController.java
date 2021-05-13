@@ -28,7 +28,8 @@ public class ForumController {
         return forumService.forum(id);
     }
 
-    @GetMapping("/allForums")
+    @RequestMapping(method = RequestMethod.GET, value ="/allForums")
+    @ResponseBody
     public List<Forum> forums() {
         return forumService.forums();
     }
@@ -39,7 +40,8 @@ public class ForumController {
         forumService.addForum(name, topic);
     }
 
-    @PutMapping("/updateForumName")
+    @RequestMapping(method = RequestMethod.PUT, value ="/updateForumName")
+    @ResponseBody
     public void forumTitle(@RequestParam(value = "idForum") int idForum,
                            @RequestParam(value = "name") String name) {
         forumService.changeForumTitle(idForum, name);
