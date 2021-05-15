@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping(path = "forum")
+@RequestMapping(path = "forum")
 public class ForumController {
 
     private final ForumService forumService;
@@ -23,7 +23,7 @@ public class ForumController {
     //---------------------------------------------------------------------------------------------
     // ? Mapping Forumuri
 
-    @GetMapping("/forum")
+    @GetMapping()
     public Forum forum(@RequestParam(value = "id") int id) {
         return forumService.forum(id);
     }
