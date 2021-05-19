@@ -13,16 +13,16 @@ import java.util.List;
 
 public class QuestionRepository implements QuestionDAO {
 
-    private final Connection connection;
-
-    public QuestionRepository() {
-        connection = ConnectionSingleton.getConnection();
-    }
+//    private final Connection connection;
+//
+//    public QuestionRepository() {
+//        connection = ConnectionSingleton.getConnection();
+//    }
 
     // * Aceasta metoda returneaza o singura intrebare, cu toate comentariile ei.
     @Override
     public Question findOne(int id) {
-
+        Connection connection = ConnectionSingleton.getConnection();
         // * Creez o intrebare pe care o returnez la final
         Question question = null;
 
@@ -51,13 +51,19 @@ public class QuestionRepository implements QuestionDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return question;
     }
 
     // * Aceasta metoda returneaza toate intrebarile unui forum
     public List<Question> findAllByForum(int idForum) {
-
+        Connection connection = ConnectionSingleton.getConnection();
         // * Creez lista pe care o returnez la final
         List<Question> questions = new ArrayList<>();
 
@@ -90,6 +96,12 @@ public class QuestionRepository implements QuestionDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return questions;
     }
@@ -97,6 +109,7 @@ public class QuestionRepository implements QuestionDAO {
     // * Aceasta metoda adauga o intrebare in baza de date
     @Override
     public void save(Question entity) {
+        Connection connection = ConnectionSingleton.getConnection();
         try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.forums WHERE id = ? ")) {
             // * Verific daca forumul in care adaug intrebarea exista.
             checkForum.setInt(1, entity.getIdForum());
@@ -118,11 +131,18 @@ public class QuestionRepository implements QuestionDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void update(int id, String title, String content) {
+        Connection connection = ConnectionSingleton.getConnection();
         try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET title = ?, content = ? WHERE id = ?")) {
             st.setString(1, title);
             st.setString(2, content);
@@ -131,6 +151,12 @@ public class QuestionRepository implements QuestionDAO {
             System.out.println("A question has been updated");
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -148,23 +174,37 @@ public class QuestionRepository implements QuestionDAO {
 
     @Override
     public void upvoteQuestion(int id) {
+        Connection connection = ConnectionSingleton.getConnection();
         try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET likes = likes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A question has been upvoted");
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void downvoteQuestion(int id) {
+        Connection connection = ConnectionSingleton.getConnection();
         try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET dislikes = dislikes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A question has been downvoted");
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -172,15 +212,23 @@ public class QuestionRepository implements QuestionDAO {
     // * Face conexiunea cu baza de date
     @Override
     public void delete(int id) {
-        try (Connection connection = ConnectionSingleton.getConnection()) {
+        Connection connection = ConnectionSingleton.getConnection();
+        try {
             deleteQuestion(id);
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     // * Aici se intampla stergerea propriu zisa
     public void deleteQuestion(int id) throws SQLException {
+        Connection connection = ConnectionSingleton.getConnection();
         PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?");
         checkQuestion.setInt(1, id);
 
@@ -201,7 +249,7 @@ public class QuestionRepository implements QuestionDAO {
 
     // * Aceasta metoda sterge toate intrebarile unui forum
     public void deleteAllByForum(int idForum) throws SQLException {
-
+        Connection connection = ConnectionSingleton.getConnection();
         // * Interoghez baza de date pentru toate intrebarile unui forum
         PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE idForum = ?");
         databaseQuestion.setInt(1, idForum);

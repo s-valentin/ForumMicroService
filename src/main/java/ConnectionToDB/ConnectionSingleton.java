@@ -22,9 +22,9 @@ public class ConnectionSingleton {
         try {
             if (connection == null)
                 connection = DriverManager.getConnection(url, username, password);
-            else if(connection.isClosed())
+            if(connection.isClosed())
                 connection = DriverManager.getConnection(url, username, password);
-            else if(!connection.isValid(10))
+            if(!connection.isValid(10))
                 connection = DriverManager.getConnection(url, username, password);
 
         } catch (SQLException e) {
