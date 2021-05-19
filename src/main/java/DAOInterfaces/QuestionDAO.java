@@ -12,9 +12,11 @@ public interface QuestionDAO {
 
     void save(Question entity);
 
-    void updateQuestionTitle(int id, String title);
+    void update(int id, String title, String content);
 
-    void updateQuestionContent(int id, String content);
+//    void updateQuestionTitle(int id, String title);
+
+//    void updateQuestionContent(int id, String content);
 
     void upvoteQuestion(int id);
 

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 public class ConnectionSingleton {
 
+    private static Connection connection;
+
     private ConnectionSingleton() {
     }
 
@@ -16,16 +18,18 @@ public class ConnectionSingleton {
         String username = System.getProperty("spring.datasource.username");
         String password = System.getProperty("spring.datasource.password");
 
-        Connection connection = null;
 
         try {
-
-            connection = DriverManager.getConnection(url, username, password);
+            if (connection == null)
+                connection = DriverManager.getConnection(url, username, password);
+            else if(connection.isClosed())
+                connection = DriverManager.getConnection(url, username, password);
+            else if(!connection.isValid(10))
+                connection = DriverManager.getConnection(url, username, password);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;
     }
-
 }

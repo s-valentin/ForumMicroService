@@ -97,14 +97,6 @@ public class ForumService {
         commentRepository.deleteAllByQuestion(idQuestion);
     }
 
-    public void changeQuestionTitle(int idQuestion, String title) {
-        questionRepository.updateQuestionTitle(idQuestion, title);
-    }
-
-    public void changeQuestionContent(int idQuestion, String content) {
-        questionRepository.updateQuestionContent(idQuestion, content);
-    }
-
     public void upvoteQuestion(int idQuestion) {
         questionRepository.upvoteQuestion(idQuestion);
     }
@@ -113,11 +105,12 @@ public class ForumService {
         questionRepository.downvoteQuestion(idQuestion);
     }
 
-    public void changeForumTitle(int idForum, String title) {
-        forumRepository.updateTitle(idForum, title);
+    public void change(int idForum, String title, String topic) {
+        forumRepository.update(idForum, title, topic);
     }
 
-    public void changeForumTopic(int idForum, String topic) {
-        forumRepository.updateTopic(idForum, topic);
+    public void modifyQuestion(int idQuestion, String title, String content) {
+        questionRepository.update(idQuestion, title, content);
     }
+
 }

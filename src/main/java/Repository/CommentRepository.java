@@ -26,7 +26,7 @@ public class CommentRepository implements CommentDAO {
         Comment comment = null;
 
         // * interoghez tabela comment pentru acel id
-        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.comment WHERE id = ?")) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             rs.next();
@@ -49,7 +49,7 @@ public class CommentRepository implements CommentDAO {
         // * Creez o lista de comentarii pe care o voi returna
         List<Comment> commentList = new ArrayList<>();
 
-        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM comment WHERE idQuestion = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.comment WHERE idQuestion = ?")) {
             // * Interoghez tabela comments
             st.setInt(1, idQuestion);
             ResultSet rs = st.executeQuery();
@@ -72,7 +72,7 @@ public class CommentRepository implements CommentDAO {
     // * aceasta metoda insereaza in tabel un comment
     @Override
     public void save(Comment entity) {
-        try (PreparedStatement st = connection.prepareStatement("INSERT INTO comment VALUES (NULL, ?, ?, ?, ?)")) {
+        try (PreparedStatement st = connection.prepareStatement("INSERT INTO heroku_f7e69bbf73fbe2a.comment VALUES (NULL, ?, ?, ?, ?)")) {
             st.setInt(1, entity.getIdQuestion());
             st.setInt(2, entity.getNumberOfDislikes());
             st.setInt(3, entity.getNumberOfDislikes());
@@ -86,7 +86,7 @@ public class CommentRepository implements CommentDAO {
 
     @Override
     public void updateContent(int id, String newContent) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET content = ? WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.comment SET content = ? WHERE id = ?")) {
             st.setString(1, newContent);
             st.setInt(2, id);
             st.executeUpdate();
@@ -98,7 +98,7 @@ public class CommentRepository implements CommentDAO {
 
     @Override
     public void upvoteComment(int id) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET likes = likes + 1 WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.comment SET likes = likes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A comment has been upvoted");
@@ -109,7 +109,7 @@ public class CommentRepository implements CommentDAO {
 
     @Override
     public void downvoteComment(int id) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE comment SET dislikes = dislikes + 1 WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.comment SET dislikes = dislikes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A comment has been downvoted");
@@ -121,7 +121,7 @@ public class CommentRepository implements CommentDAO {
     // * aceasta metoda sterge un comentariu din tabela
     @Override
     public void delete(int id) {
-        try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE id=?")) {
+        try (PreparedStatement st = connection.prepareStatement("DELETE FROM heroku_f7e69bbf73fbe2a.comment WHERE id=?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A comment has been DELETED successfully from the table");
@@ -134,7 +134,7 @@ public class CommentRepository implements CommentDAO {
     @Override
     public void deleteAllByQuestion(int idQuestion) {
 
-        try (PreparedStatement st = connection.prepareStatement("DELETE FROM comment WHERE idQuestion=?")) {
+        try (PreparedStatement st = connection.prepareStatement("DELETE FROM heroku_f7e69bbf73fbe2a.comment WHERE idQuestion=?")) {
             st.setInt(1, idQuestion);
             st.executeUpdate();
 

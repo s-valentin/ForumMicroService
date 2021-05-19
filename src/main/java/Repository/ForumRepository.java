@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ForumRepository implements ForumDAO {
 
-    private final Connection connection;
+    private Connection connection;
 
     public ForumRepository() {
         connection = ConnectionSingleton.getConnection();
@@ -25,7 +25,7 @@ public class ForumRepository implements ForumDAO {
         // * Creez un forum pe care il returnez la final
         Forum forum = null;
 
-        try (PreparedStatement st = connection.prepareStatement("select * from Forums where id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("select * from heroku_f7e69bbf73fbe2a.forums where id = ?")) {
 
             // * Pregatesc interogarea pentru baza de date
 
@@ -58,8 +58,9 @@ public class ForumRepository implements ForumDAO {
     public List<Forum> findAll() {
 
         List<Forum> forums = new ArrayList<>();
+        connection = ConnectionSingleton.getConnection();
 
-        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM Forums")) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.forums")) {
             // * Pregatesc interogarea pentru baza de date
 
 
@@ -81,9 +82,13 @@ public class ForumRepository implements ForumDAO {
                 // * Adaug forumul creat in lista finala.
                 forums.add(forum);
             }
+//                rs.close();
+//                st.close();
+//                connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return forums;
 
     }
@@ -91,7 +96,7 @@ public class ForumRepository implements ForumDAO {
     @Override
     public void save(Forum entity) {
 
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO Forums Values(NULL, ?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO heroku_f7e69bbf73fbe2a.forums Values(NULL, ?, ?)")) {
 
             // * Pregatesc statement-ul de inserare in baza de date
 
@@ -107,10 +112,11 @@ public class ForumRepository implements ForumDAO {
     }
 
     @Override
-    public void updateTitle(int id, String name) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE forums SET title = ? WHERE id = ?")) {
+    public void update(int id, String name, String topic) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.forums SET title = ?, topic = ? WHERE id = ?")) {
             st.setString(1, name);
-            st.setInt(2, id);
+            st.setString(2, topic);
+            st.setInt(3, id);
             st.executeUpdate();
             System.out.println("A forums' title has been updated");
         } catch (SQLException e) {
@@ -118,22 +124,22 @@ public class ForumRepository implements ForumDAO {
         }
     }
 
-    @Override
-    public void updateTopic(int id, String topic) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE forums SET topic = ? WHERE id = ?")) {
-            st.setString(1, topic);
-            st.setInt(2, id);
-            st.executeUpdate();
-            System.out.println("A forums' topic has been updated");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void updateTopic(int id, String topic) {
+//        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.forums SET topic = ? WHERE id = ?")) {
+//            st.setString(1, topic);
+//            st.setInt(2, id);
+//            st.executeUpdate();
+//            System.out.println("A forums' topic has been updated");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     // * Aceasta metoda sterge un forum cu toate intrebarile lui
     @Override
     public void delete(int id) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM Forums WHERE id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM heroku_f7e69bbf73fbe2a.forums WHERE id = ?")) {
             statement.setInt(1, id);
             statement.executeUpdate();
 

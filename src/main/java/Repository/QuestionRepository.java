@@ -26,7 +26,7 @@ public class QuestionRepository implements QuestionDAO {
         // * Creez o intrebare pe care o returnez la final
         Question question = null;
 
-        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM Questions WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE id = ?")) {
             // * Pregatesc interogarea pentru baza de date
             st.setInt(1, id);
 
@@ -61,7 +61,7 @@ public class QuestionRepository implements QuestionDAO {
         // * Creez lista pe care o returnez la final
         List<Question> questions = new ArrayList<>();
 
-        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE idForum = ?")) {
             // * Pregatesc interogarea pentru baza de date
             st.setInt(1, idForum);
 
@@ -97,7 +97,7 @@ public class QuestionRepository implements QuestionDAO {
     // * Aceasta metoda adauga o intrebare in baza de date
     @Override
     public void save(Question entity) {
-        try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM Forums WHERE id = ? ")) {
+        try (PreparedStatement checkForum = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.forums WHERE id = ? ")) {
             // * Verific daca forumul in care adaug intrebarea exista.
             checkForum.setInt(1, entity.getIdForum());
             ResultSet rs = checkForum.executeQuery();
@@ -107,7 +107,7 @@ public class QuestionRepository implements QuestionDAO {
                 return;
 
             // * Pregatesc statement-ul de inserare in baza de date
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO Questions VALUES (NULL, ?, ?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO heroku_f7e69bbf73fbe2a.questions VALUES (NULL, ?, ?, ?, ?, ?)");
             statement.setInt(1, entity.getIdForum());
             statement.setString(2, entity.getTitle());
             statement.setString(3, entity.getContent());
@@ -122,32 +122,33 @@ public class QuestionRepository implements QuestionDAO {
     }
 
     @Override
-    public void updateQuestionTitle(int id, String title) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET title = ? WHERE id = ?")) {
+    public void update(int id, String title, String content) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET title = ?, content = ? WHERE id = ?")) {
             st.setString(1, title);
-            st.setInt(2, id);
+            st.setString(2, content);
+            st.setInt(3, id);
             st.executeUpdate();
-            System.out.println("A question's title has been updated");
+            System.out.println("A question has been updated");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void updateQuestionContent(int id, String content) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET content = ? WHERE id = ?")) {
-            st.setString(1, content);
-            st.setInt(2, id);
-            st.executeUpdate();
-            System.out.println("A question's content has been updated");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void updateQuestionContent(int id, String content) {
+//        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET content = ? WHERE id = ?")) {
+//            st.setString(1, content);
+//            st.setInt(2, id);
+//            st.executeUpdate();
+//            System.out.println("A question's content has been updated");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void upvoteQuestion(int id) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET likes = likes + 1 WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET likes = likes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A question has been upvoted");
@@ -158,7 +159,7 @@ public class QuestionRepository implements QuestionDAO {
 
     @Override
     public void downvoteQuestion(int id) {
-        try (PreparedStatement st = connection.prepareStatement("UPDATE questions SET dislikes = dislikes + 1 WHERE id = ?")) {
+        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET dislikes = dislikes + 1 WHERE id = ?")) {
             st.setInt(1, id);
             st.executeUpdate();
             System.out.println("A question has been downvoted");
@@ -180,7 +181,7 @@ public class QuestionRepository implements QuestionDAO {
 
     // * Aici se intampla stergerea propriu zisa
     public void deleteQuestion(int id) throws SQLException {
-        PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM Questions WHERE id=?");
+        PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?");
         checkQuestion.setInt(1, id);
 
         ResultSet rs = checkQuestion.executeQuery();
@@ -188,7 +189,7 @@ public class QuestionRepository implements QuestionDAO {
         if (!val)
             return;
 
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM Questions WHERE id=?");
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?");
         statement.setInt(1, id);
         statement.executeUpdate();
 
@@ -202,7 +203,7 @@ public class QuestionRepository implements QuestionDAO {
     public void deleteAllByForum(int idForum) throws SQLException {
 
         // * Interoghez baza de date pentru toate intrebarile unui forum
-        PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM Questions WHERE idForum = ?");
+        PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE idForum = ?");
         databaseQuestion.setInt(1, idForum);
 
         ResultSet rs = databaseQuestion.executeQuery();

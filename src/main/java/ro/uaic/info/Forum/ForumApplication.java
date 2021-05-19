@@ -1,15 +1,16 @@
 package ro.uaic.info.Forum;
 
+import ConnectionToDB.ConnectionSingleton;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
 
 
 @SpringBootApplication
-@EnableEurekaClient
+//@EnableEurekaClient
 public class ForumApplication {
 
     public static void main(String[] args) {
@@ -19,6 +20,8 @@ public class ForumApplication {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Connection connection = ConnectionSingleton.getConnection();
+
         SpringApplication.run(ForumApplication.class, args);
 
     }
