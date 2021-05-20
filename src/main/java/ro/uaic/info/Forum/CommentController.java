@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/forum/comment")
 public class CommentController {
 
     private final ForumService forumService;
