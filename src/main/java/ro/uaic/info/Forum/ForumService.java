@@ -113,4 +113,11 @@ public class ForumService {
         questionRepository.update(idQuestion, title, content);
     }
 
+    public Integer nbOfComments(int id) {
+        return commentRepository.numberOfComments(id);
+    }
+
+    public int nbOfQuestions(int idForum) {
+        return questionRepository.number(idForum);
+    }
 }

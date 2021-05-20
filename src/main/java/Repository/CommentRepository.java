@@ -13,12 +13,6 @@ import java.util.List;
 
 public class CommentRepository implements CommentDAO {
 
-//    public Connection connection;
-//
-//    public CommentRepository() throws SQLException {
-//        connection = ConnectionSingleton.getConnection();
-//    }
-
     @Override
     public Comment findOne(int id) {
         // * creez un comentariu pe care il returnez
@@ -33,6 +27,7 @@ public class CommentRepository implements CommentDAO {
             // * incarc obiectul comment cu informatiile interogate
             comment = new Comment(rs.getString("content"));
             comment.setId(rs.getInt("id"));
+            comment.setIdQuestion(rs.getInt("idQuestion"));
             comment.setNumberOfLikes(rs.getInt("likes"));
             comment.setNumberOfDislikes(rs.getInt("dislikes"));
         } catch (SQLException e) {
@@ -57,28 +52,30 @@ public class CommentRepository implements CommentDAO {
         List<Comment> commentList = new ArrayList<>();
 
         Connection connection = ConnectionSingleton.getConnection();
+        ResultSet resultSet;
+        PreparedStatement st;
 
-        try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.comment WHERE idQuestion = ?")) {
+        try {
+            st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.comment WHERE idQuestion = ?");
             // * Interoghez tabela comments
             st.setInt(1, idQuestion);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
+            resultSet = st.executeQuery();
+            while (resultSet.next()) {
                 // * Adaug interogarile in lista de comentarii
-                Comment comment = new Comment(rs.getString("content"));
-                comment.setId(rs.getInt("id"));
-                comment.setNumberOfLikes(rs.getInt("likes"));
-                comment.setNumberOfDislikes(rs.getInt("dislikes"));
+                Comment comment = new Comment(resultSet.getString("content"));
+                comment.setId(resultSet.getInt("id"));
+                comment.setIdQuestion(resultSet.getInt("idQuestion"));
+                comment.setNumberOfLikes(resultSet.getInt("likes"));
+                comment.setNumberOfDislikes(resultSet.getInt("dislikes"));
 
                 commentList.add(comment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            try {connection.close();} catch (SQLException e) {e.printStackTrace();}
+//            try {resultSet.close();} catch (SQLException e) {e.printStackTrace();}
+//            try {st.close();} catch (SQLException e) {e.printStackTrace();}
         }
 
         // * returnez lista
@@ -205,6 +202,30 @@ public class CommentRepository implements CommentDAO {
             }
         }
 
+    }
+
+    @Override
+    public int numberOfComments(int id) {
+        Connection connection = ConnectionSingleton.getConnection();
+        int ceva = 0;
+        try (PreparedStatement st = connection.prepareStatement("SELECT COUNT(*) AS number FROM heroku_f7e69bbf73fbe2a.comment WHERE idQuestion = ?")) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            rs.next();
+
+            ceva = rs.getInt("number");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ceva;
     }
 
 }

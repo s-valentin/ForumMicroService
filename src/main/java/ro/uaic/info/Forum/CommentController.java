@@ -37,6 +37,15 @@ public class CommentController {
         return ResponseEntity.ok(commentList);
     }
 
+    @GetMapping("/number/{id}")
+    public ResponseEntity<Integer> nbOfComments(@PathVariable(value = "id") int id){
+        Integer number = null;
+
+        number = forumService.nbOfComments(id);
+
+        return ResponseEntity.ok(number);
+    }
+
     @PostMapping
     public ResponseEntity<String> addComment(@RequestBody Map<String, String> commentMap) {
         int idQuestion = 0;

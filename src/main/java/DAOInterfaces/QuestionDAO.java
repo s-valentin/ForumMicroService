@@ -27,4 +27,6 @@ public interface QuestionDAO {
     void deleteQuestion(int id) throws SQLException;
 
     void deleteAllByForum(int idForum) throws SQLException;
+
+    int number(int idForum);
 }

@@ -21,4 +21,6 @@ public interface CommentDAO {
     void delete(int id);
 
     void deleteAllByQuestion(int idQuestion) throws SQLException;
+
+    int numberOfComments(int id);
 }

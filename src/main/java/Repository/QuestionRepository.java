@@ -13,11 +13,6 @@ import java.util.List;
 
 public class QuestionRepository implements QuestionDAO {
 
-//    private final Connection connection;
-//
-//    public QuestionRepository() {
-//        connection = ConnectionSingleton.getConnection();
-//    }
 
     // * Aceasta metoda returneaza o singura intrebare, cu toate comentariile ei.
     @Override
@@ -51,7 +46,7 @@ public class QuestionRepository implements QuestionDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -84,10 +79,15 @@ public class QuestionRepository implements QuestionDAO {
                 question.setNumberOfDislikes(rs.getInt("dislikes"));
                 question.setIdForum(idForum);
 
-                // * Adaug toate comentariile acelei intrebari
-                CommentRepository commentRepository = new CommentRepository();
-                question.setComments(commentRepository.findAllByQuestion(question.getId()));
-                question.setNumberOfComments(question.getComments().size());
+//                // * Adaug toate comentariile acelei intrebari
+//                CommentRepository commentRepository = new CommentRepository();
+//                question.setComments(commentRepository.findAllByQuestion(question.getId()));
+//                question.setNumberOfComments(question.getComments().size());
+
+                if (connection.isClosed() && rs.isClosed()) {
+                    rs = st.executeQuery();
+                    connection = ConnectionSingleton.getConnection();
+                }
 
                 // * Adaug intrebarea creata in lista de intrebari pe care o returnez
                 questions.add(question);
@@ -96,7 +96,7 @@ public class QuestionRepository implements QuestionDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -131,7 +131,7 @@ public class QuestionRepository implements QuestionDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -151,7 +151,7 @@ public class QuestionRepository implements QuestionDAO {
             System.out.println("A question has been updated");
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -159,18 +159,6 @@ public class QuestionRepository implements QuestionDAO {
             }
         }
     }
-
-//    @Override
-//    public void updateQuestionContent(int id, String content) {
-//        try (PreparedStatement st = connection.prepareStatement("UPDATE heroku_f7e69bbf73fbe2a.questions SET content = ? WHERE id = ?")) {
-//            st.setString(1, content);
-//            st.setInt(2, id);
-//            st.executeUpdate();
-//            System.out.println("A question's content has been updated");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @Override
     public void upvoteQuestion(int id) {
@@ -181,7 +169,7 @@ public class QuestionRepository implements QuestionDAO {
             System.out.println("A question has been upvoted");
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -199,7 +187,7 @@ public class QuestionRepository implements QuestionDAO {
             System.out.println("A question has been downvoted");
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -215,9 +203,7 @@ public class QuestionRepository implements QuestionDAO {
         Connection connection = ConnectionSingleton.getConnection();
         try {
             deleteQuestion(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -227,39 +213,85 @@ public class QuestionRepository implements QuestionDAO {
     }
 
     // * Aici se intampla stergerea propriu zisa
-    public void deleteQuestion(int id) throws SQLException {
+    public void deleteQuestion(int id) {
         Connection connection = ConnectionSingleton.getConnection();
-        PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?");
-        checkQuestion.setInt(1, id);
 
-        ResultSet rs = checkQuestion.executeQuery();
-        boolean val = rs.next();
-        if (!val)
-            return;
+        try (PreparedStatement checkQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?")) {
+            checkQuestion.setInt(1, id);
 
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?");
-        statement.setInt(1, id);
-        statement.executeUpdate();
+            ResultSet rs = checkQuestion.executeQuery();
+            boolean val = rs.next();
+            if (!val)
+                return;
 
-        // * Ma folosesc de functia din commentRepository pentru a sterge toate comentariile
-        CommentRepository commentRepository = new CommentRepository();
-        commentRepository.deleteAllByQuestion(id);
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM heroku_f7e69bbf73fbe2a.questions WHERE id=?");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+
+            // * Ma folosesc de functia din commentRepository pentru a sterge toate comentariile
+            CommentRepository commentRepository = new CommentRepository();
+            commentRepository.deleteAllByQuestion(id);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
     // * Aceasta metoda sterge toate intrebarile unui forum
-    public void deleteAllByForum(int idForum) throws SQLException {
+    public void deleteAllByForum(int idForum) {
         Connection connection = ConnectionSingleton.getConnection();
         // * Interoghez baza de date pentru toate intrebarile unui forum
-        PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE idForum = ?");
-        databaseQuestion.setInt(1, idForum);
+        try (PreparedStatement databaseQuestion = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.questions WHERE idForum = ?")) {
+            databaseQuestion.setInt(1, idForum);
 
-        ResultSet rs = databaseQuestion.executeQuery();
+            ResultSet rs = databaseQuestion.executeQuery();
 
-        // * Pentru fiecare intrebare gasita cu idForum-ul specificat, o sterg apeland functia de mai sus.
-        while (rs.next()) {
-            deleteQuestion(rs.getInt("id"));
+            // * Pentru fiecare intrebare gasita cu idForum-ul specificat, o sterg apeland functia de mai sus.
+            while (rs.next()) {
+                deleteQuestion(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
+
     }
+
+    @Override
+    public int number(int idForum) {
+        Connection connection = ConnectionSingleton.getConnection();
+        int ceva = 0;
+        try (PreparedStatement st = connection.prepareStatement("SELECT COUNT(*) AS number FROM heroku_f7e69bbf73fbe2a.questions WHERE idForum = ?")) {
+            st.setInt(1, idForum);
+            ResultSet rs = st.executeQuery();
+
+            rs.next();
+
+            ceva = rs.getInt("number");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ceva;
+    }
+
 }

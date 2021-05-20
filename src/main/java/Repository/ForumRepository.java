@@ -13,12 +13,6 @@ import java.util.List;
 
 public class ForumRepository implements ForumDAO {
 
-//    private Connection connection;
-//
-//    public ForumRepository() {
-//        connection = ConnectionSingleton.getConnection();
-//    }
-
     // * Aceasta metoda returneaza un forum, cu toate intrebarile lui.
     @Override
     public Forum findOne(int id) {
@@ -50,11 +44,7 @@ public class ForumRepository implements ForumDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            try {connection.close();} catch (SQLException e) {e.printStackTrace();}
         }
 
         return forum;
@@ -66,7 +56,6 @@ public class ForumRepository implements ForumDAO {
 
         Connection connection = ConnectionSingleton.getConnection();
         List<Forum> forums = new ArrayList<>();
-        connection = ConnectionSingleton.getConnection();
 
         try (PreparedStatement st = connection.prepareStatement("SELECT * FROM heroku_f7e69bbf73fbe2a.forums")) {
             // * Pregatesc interogarea pentru baza de date
@@ -83,16 +72,13 @@ public class ForumRepository implements ForumDAO {
                 forum.setId(rs.getInt("id"));
 
                 // * Adaug toate intrebarile acelui forum
-                QuestionRepository questions = new QuestionRepository();
-                forum.setQuestions(questions.findAllByForum(forum.getId()));
-                forum.setNumberOfQuestions(forum.getQuestions().size());
+//                QuestionRepository questions = new QuestionRepository();
+//                forum.setQuestions(questions.findAllByForum(forum.getId()));
+//                forum.setNumberOfQuestions(forum.getQuestions().size());
 
                 // * Adaug forumul creat in lista finala.
                 forums.add(forum);
             }
-//                rs.close();
-//                st.close();
-//                connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -109,7 +95,6 @@ public class ForumRepository implements ForumDAO {
 
     @Override
     public void save(Forum entity) {
-
         Connection connection = ConnectionSingleton.getConnection();
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO heroku_f7e69bbf73fbe2a.forums Values(NULL, ?, ?)")) {
 
@@ -129,7 +114,6 @@ public class ForumRepository implements ForumDAO {
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override

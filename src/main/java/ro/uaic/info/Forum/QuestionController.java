@@ -39,6 +39,18 @@ public class QuestionController {
         return ResponseEntity.ok(questionList);
     }
 
+    @GetMapping("/number/{idForum}")
+    public ResponseEntity<Integer> numberOfQuestions(@PathVariable(value= "idForum") int idForum)
+    {
+        Integer ceva = 0;
+
+        ceva = forumService.nbOfQuestions(idForum);
+
+        return ResponseEntity.ok(ceva);
+    }
+
+
+
     @PostMapping
     public ResponseEntity<String> addQuestion(@RequestBody Map<String, String> questionMap) {
         int idForum = 0;
@@ -57,7 +69,6 @@ public class QuestionController {
 
         return ResponseEntity.ok("Add Question Success");
     }
-
     @PutMapping
     public ResponseEntity<String> modifyQuestion(@RequestBody Map<String, String> questionMap) {
         int idQuestion = 0;
