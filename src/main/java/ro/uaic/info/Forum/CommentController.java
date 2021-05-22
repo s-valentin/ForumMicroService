@@ -1,6 +1,7 @@
 package ro.uaic.info.Forum;
 
 import Model.Comment;
+import Model.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addComment(@RequestBody Map<String, String> commentMap) {
+    public ResponseEntity<Response> addComment(@RequestBody Map<String, String> commentMap) {
         int idQuestion = 0;
         String content = null;
 
@@ -60,23 +61,23 @@ public class CommentController {
 
         forumService.addComment(idQuestion, content, 0, 0);
 
-        return ResponseEntity.ok("Add Comment Success");
+        return ResponseEntity.ok(new Response("Add Comment Success"));
     }
 
     @PutMapping("/upvote/{idComment}")
-    public ResponseEntity<String> upvoteComment(@PathVariable(value = "idComment") int idComment) {
+    public ResponseEntity<Response> upvoteComment(@PathVariable(value = "idComment") int idComment) {
         forumService.upvoteComment(idComment);
-        return ResponseEntity.ok("Upvote Comment Success");
+        return ResponseEntity.ok(new Response("Upvote Comment Success"));
     }
 
     @PutMapping("/downvote/{idComment}")
-    public ResponseEntity<String> downvoteComment(@PathVariable(value = "idComment") int idComment) {
+    public ResponseEntity<Response> downvoteComment(@PathVariable(value = "idComment") int idComment) {
         forumService.downvoteComment(idComment);
-        return ResponseEntity.ok("Downvote Comment Success");
+        return ResponseEntity.ok(new Response("Downvote Comment Success"));
     }
 
     @PutMapping
-    public ResponseEntity<String> updateComment(@RequestBody Map<String, String> commentMap) {
+    public ResponseEntity<Response> updateComment(@RequestBody Map<String, String> commentMap) {
         int idComment = 0;
         String content = null;
 
@@ -89,22 +90,22 @@ public class CommentController {
 
         forumService.updateComment(idComment, content);
 
-        return ResponseEntity.ok("Update Comment Success");
+        return ResponseEntity.ok(new Response("Update Comment Success"));
     }
 
     @DeleteMapping("/delete/{idComment}")
-    public ResponseEntity<String> deleteComment(@PathVariable(value = "idComment") int idComment) {
+    public ResponseEntity<Response> deleteComment(@PathVariable(value = "idComment") int idComment) {
         forumService.deleteComment(idComment);
 
-        return ResponseEntity.ok("Delete Comment Success");
+        return ResponseEntity.ok(new Response("Delete Comment Success"));
     }
 
     // * Sterge toate comentariile asociate unei intrebari
     // ! nu toate comentariile existente in baza de date
     @DeleteMapping("/deleteAll/{idQuestion}")
-    public ResponseEntity<String> deleteAllComments(@PathVariable(value = "idQuestion") int idQuestion) {
+    public ResponseEntity<Response> deleteAllComments(@PathVariable(value = "idQuestion") int idQuestion) {
         forumService.deleteAllComments(idQuestion);
 
-        return ResponseEntity.ok("Delete ALL Comments Success");
+        return ResponseEntity.ok(new Response("Delete ALL Comments Success"));
     }
 }

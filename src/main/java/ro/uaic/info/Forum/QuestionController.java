@@ -1,6 +1,7 @@
 package ro.uaic.info.Forum;
 
 import Model.Question;
+import Model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class QuestionController {
 
 
     @PostMapping
-    public ResponseEntity<String> addQuestion(@RequestBody Map<String, String> questionMap) {
+    public ResponseEntity<Response> addQuestion(@RequestBody Map<String, String> questionMap) {
         int idForum = 0;
         String title = null;
         String content = null;
@@ -67,10 +68,10 @@ public class QuestionController {
 
         forumService.addQuestion(idForum, title, content);
 
-        return ResponseEntity.ok("Add Question Success");
+        return ResponseEntity.ok(new Response("Add Question Success"));
     }
     @PutMapping
-    public ResponseEntity<String> modifyQuestion(@RequestBody Map<String, String> questionMap) {
+    public ResponseEntity<Response> modifyQuestion(@RequestBody Map<String, String> questionMap) {
         int idQuestion = 0;
         String title = null;
         String content = null;
@@ -85,19 +86,21 @@ public class QuestionController {
 
         forumService.modifyQuestion(idQuestion, title, content);
 
-        return ResponseEntity.ok("Update Question Success");
+        return ResponseEntity.ok(new Response("Update Question Success"));
     }
 
     @PutMapping("/upvote/{idQuestion}")
-    public ResponseEntity<String> upvoteQuestion(@PathVariable(value = "idQuestion") int idQuestion) {
+    public ResponseEntity<Response> upvoteQuestion(@PathVariable(value = "idQuestion") int idQuestion) {
         forumService.upvoteQuestion(idQuestion);
 
-        return ResponseEntity.ok("Upvote Question Success");
+        return ResponseEntity.ok(new Response("Upvote Question Success"));
     }
 
     @PutMapping("/downvote/{idQuestion}")
-    public void downvoteQuestion(@PathVariable(value = "idQuestion") int idQuestion) {
+    public ResponseEntity<Response> downvoteQuestion(@PathVariable(value = "idQuestion") int idQuestion) {
         forumService.downvoteQuestion(idQuestion);
+
+        return ResponseEntity.ok(new Response("Downvote Question Success"));
     }
 
     @DeleteMapping("{id}")

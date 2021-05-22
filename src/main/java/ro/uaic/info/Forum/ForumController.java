@@ -2,6 +2,7 @@ package ro.uaic.info.Forum;
 
 
 import Model.Forum;
+import Model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class ForumController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createForum(@RequestBody Map<String, String> forumMap) {
+    public ResponseEntity<Response> createForum(@RequestBody Map<String, String> forumMap) {
         String name = null;
         String topic = null;
 
@@ -54,11 +55,12 @@ public class ForumController {
 
         forumService.addForum(name, topic);
 
-        return ResponseEntity.ok("Add Forum Success");
+        return ResponseEntity.ok(new Response("Add Forum Success"));
+        //return ResponseEntity.ok("Add Forum Success");
     }
 
     @PutMapping()
-    public ResponseEntity<String> updateForum(@RequestBody Map<String, String> forumMap) {
+    public ResponseEntity<Response> updateForum(@RequestBody Map<String, String> forumMap) {
         int idForum = 0;
         String name = null;
         String topic = null;
@@ -73,7 +75,7 @@ public class ForumController {
 
         forumService.change(idForum, name, topic);
 
-        return ResponseEntity.ok("Update Forum Success");
+        return ResponseEntity.ok(new Response("Update Forum Success"));
     }
 
     @DeleteMapping("{id}")
